@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Questionnaire</title>
+  <title>L'Épreuve des Témoins</title>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400&family=Outfit:wght@300;400;500&display=swap" rel="stylesheet" />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -94,6 +94,29 @@
     }
     input[type="text"]:focus, input[type="date"]:focus { border-color:var(--gold); box-shadow:0 0 0 3px rgba(201,149,74,.13); }
 
+    textarea {
+      width:100%; padding:.65rem 1rem;
+      background:var(--bg); border:1px solid var(--border); border-radius:var(--radius);
+      font-family:'Outfit',sans-serif; font-size:.95rem; font-weight:300; color:var(--text);
+      outline:none; resize:vertical; min-height:100px; line-height:1.6;
+      transition:border-color .2s, box-shadow .2s;
+    }
+    textarea:focus { border-color:var(--gold); box-shadow:0 0 0 3px rgba(201,149,74,.13); }
+
+    /* IDENTITY CARD */
+    .identity-card {
+      background: var(--accent-lt);
+      border: 1px solid var(--gold);
+      border-radius: 10px;
+      padding: 1.6rem 1.8rem;
+      margin-bottom: 1rem;
+      box-shadow: var(--shadow);
+    }
+    .identity-card .card-header { margin-bottom: 1.2rem; }
+    .identity-row { display: flex; gap: .8rem; }
+    .identity-row input { flex: 1; }
+    @media (max-width:480px) { .identity-row { flex-direction: column; } }
+
     /* SCALE */
     .scale-wrap { display:flex; flex-direction:column; gap:.5rem; }
     .scale-row  { display:flex; align-items:center; gap:.85rem; }
@@ -152,7 +175,7 @@
       <!-- Texte affiché si le logo ne charge pas -->
       <div class="logo-text" id="logo-fallback" style="display:none">Prénom <em>&amp; Prénom</em></div>
     </div>
-    <p class="header-tagline">Questionnaire · Répondez à votre rythme</p>
+    <p class="header-tagline">L'Épreuve des Témoins · Répondez à votre rythme</p>
   </header>
 
   <div id="questionnaire-page">
@@ -175,7 +198,7 @@
    ① URL DE TON APPS SCRIPT
    👉 Remplace la valeur ci-dessous après déploiement
 ══════════════════════════════════════════════════════ */
-const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxXCb9Ons-XXZ-d21aceCrJNfg2Yg77dbdUBRHdyuRi9r0fA3mkFtobmhlB6KSAEfF1Ag/exec";
+const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwdnuzpn_P55SQPD5OMpmyCDuViT9w2FQsmiAGLZ30W7-I4k4H1UhdN9KTnMmCFXqAQUQ/exec";
 
 /* ══════════════════════════════════════════════════════
    ② TES 27 QUESTIONS
@@ -215,12 +238,13 @@ const QUESTIONS = [
   { id:21, page:4, question:"Énigme 21", type:"text",  placeholder:"Votre réponse…" },
   { id:22, page:4, question:"Énigme 22", type:"date"  },
 
-  // PAGE 5 — Q23 à Q27
+  // PAGE 5 — Q23 à Q27 + question finale + identité
   { id:23, page:5, question:"Énigme 23", type:"text",  placeholder:"Votre réponse…" },
   { id:24, page:5, question:"Énigme 24", type:"scale", min:1, max:5  },
   { id:25, page:5, question:"Énigme 25", type:"text",  placeholder:"Votre réponse…" },
   { id:26, page:5, question:"Énigme 26", type:"scale", min:1, max:20 },
   { id:27, page:5, question:"Énigme 27", type:"text",  placeholder:"Votre réponse…" },
+  { id:28, page:5, question:"En quelques mots, qu'avez-vous retenu de cette aventure ? Une surprise, une difficulté, un souvenir ?", type:"textarea", placeholder:"Vos impressions libres…" },
 ];
 
 /* ══════════════════════════════════════════════════════
@@ -229,6 +253,52 @@ const QUESTIONS = [
 const TOTAL_PAGES = 5;
 let currentPage = 1;
 let hintsUsed = 0;
+const STORAGE_KEY = "questionnaire_answers";
+
+// Sauvegarde toutes les réponses dans localStorage
+function saveToStorage() {
+  const data = { hints: hintsUsed, answers: {} };
+  QUESTIONS.forEach(q => {
+    const el = document.getElementById(`q${q.id}`);
+    if (el) data.answers[`q${q.id}`] = el.value;
+  });
+  const prenom = document.getElementById("participant-prenom");
+  const nom    = document.getElementById("participant-nom");
+  if (prenom) data.answers["prenom"] = prenom.value;
+  if (nom)    data.answers["nom"]    = nom.value;
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+}
+
+// Restaure les réponses au chargement
+function restoreFromStorage() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) return;
+    const data = JSON.parse(raw);
+    if (data.answers) {
+      QUESTIONS.forEach(q => {
+        const el = document.getElementById(`q${q.id}`);
+        if (!el) return;
+        const val = data.answers[`q${q.id}`];
+        if (val !== undefined && val !== "") {
+          el.value = val;
+          if (q.type === "scale") {
+            const label = document.getElementById(`val${q.id}`);
+            if (label) label.textContent = val;
+          }
+        }
+      });
+      const prenom = document.getElementById("participant-prenom");
+      const nom    = document.getElementById("participant-nom");
+      if (prenom && data.answers["prenom"]) prenom.value = data.answers["prenom"];
+      if (nom    && data.answers["nom"])    nom.value    = data.answers["nom"];
+    }
+    if (data.hints) {
+      hintsUsed = data.hints;
+      document.getElementById("hints-count").textContent = hintsUsed;
+    }
+  } catch(e) { /* ignore */ }
+}
 
 // Build pages
 const container = document.getElementById("pages-container");
@@ -250,6 +320,8 @@ for (let p = 1; p <= TOTAL_PAGES; p++) {
     const iw = document.createElement("div");
     if (q.type === "text") {
       iw.innerHTML = `<input type="text" id="q${q.id}" placeholder="${q.placeholder||''}" oninput="updateProgress()" autocomplete="off" />`;
+    } else if (q.type === "textarea") {
+      iw.innerHTML = `<textarea id="q${q.id}" placeholder="${q.placeholder||''}" oninput="updateProgress()" rows="4"></textarea>`;
     } else if (q.type === "date") {
       iw.innerHTML = `<input type="date" id="q${q.id}" onchange="updateProgress()" />`;
     } else {
@@ -293,6 +365,20 @@ for (let p = 1; p <= TOTAL_PAGES; p++) {
     b.onclick=()=>goToPage(p+1, false);
     row.appendChild(b);
   } else {
+    // Carte identité (page finale uniquement)
+    const idCard = document.createElement("div");
+    idCard.className = "identity-card";
+    idCard.innerHTML = `
+      <div class="card-header">
+        <div class="q-num" style="border-color:var(--accent);color:var(--accent)">✦</div>
+        <div class="q-title">Et vous, c'est qui ?</div>
+      </div>
+      <div class="identity-row">
+        <input type="text" id="participant-prenom" placeholder="Prénom" oninput="updateProgress()" autocomplete="given-name" />
+        <input type="text" id="participant-nom" placeholder="Nom" oninput="updateProgress()" autocomplete="family-name" />
+      </div>`;
+    pageEl.insertBefore(idCard, row);
+
     const b = document.createElement("button");
     b.type="button"; b.className="btn btn-submit"; b.id="submit-btn"; b.textContent="Envoyer mes réponses";
     b.onclick=submitForm;
@@ -338,6 +424,7 @@ function revealHint(btn, hid) {
     btn.dataset.used = "true"; btn.classList.add("used");
     hintsUsed++;
     document.getElementById("hints-count").textContent = hintsUsed;
+    saveToStorage();
   }
   document.getElementById(hid).classList.toggle("visible");
 }
@@ -350,7 +437,11 @@ function updateProgress() {
     if (q.type==="scale" || (el.value && el.value.trim())) filled++;
   });
   document.getElementById("progress-fill").style.width = Math.round(filled/QUESTIONS.length*100)+"%";
+  saveToStorage();
 }
+
+// Restaure les réponses une fois le DOM prêt
+restoreFromStorage();
 updateProgress();
 
 async function submitForm() {
@@ -358,8 +449,11 @@ async function submitForm() {
   btn.disabled=true; btn.textContent="Envoi en cours…";
   const payload = {hints_used: hintsUsed};
   QUESTIONS.forEach(q => { payload[`q${q.id}`] = document.getElementById(`q${q.id}`)?.value||""; });
+  payload["prenom"] = document.getElementById("participant-prenom")?.value || "";
+  payload["nom"]    = document.getElementById("participant-nom")?.value    || "";
   try {
     await fetch(APPS_SCRIPT_URL, {method:"POST", mode:"no-cors", headers:{"Content-Type":"application/json"}, body:JSON.stringify(payload)});
+    localStorage.removeItem(STORAGE_KEY); // efface la sauvegarde après envoi
     document.getElementById("questionnaire-page").style.display="none";
     document.getElementById("result-page").style.display="block";
     window.scrollTo({top:0, behavior:"smooth"});
