@@ -175,7 +175,7 @@
       <!-- Texte affiché si le logo ne charge pas -->
       <div class="logo-text" id="logo-fallback" style="display:none">Prénom <em>&amp; Prénom</em></div>
     </div>
-    <p class="header-tagline">L'Épreuve des Témoins · Répondez à votre rythme</p>
+    <p class="header-tagline">Les énigmes des mariés</p>
   </header>
 
   <div id="questionnaire-page">
@@ -257,6 +257,50 @@ let currentPage = 1;
 let hintsUsed = 0;
 const STORAGE_KEY = "questionnaire_answers";
 
+// Sauvegarde toutes les réponses dans localStorage
+function saveToStorage() {
+  const data = { hints: hintsUsed, answers: {} };
+  QUESTIONS.forEach(q => {
+    const el = document.getElementById(`q${q.id}`);
+    if (el) data.answers[`q${q.id}`] = el.value;
+  });
+  const prenom = document.getElementById("participant-prenom");
+  const nom    = document.getElementById("participant-nom");
+  if (prenom) data.answers["prenom"] = prenom.value;
+  if (nom)    data.answers["nom"]    = nom.value;
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+}
+
+// Restaure les réponses au chargement
+function restoreFromStorage() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) return;
+    const data = JSON.parse(raw);
+    if (data.answers) {
+      QUESTIONS.forEach(q => {
+        const el = document.getElementById(`q${q.id}`);
+        if (!el) return;
+        const val = data.answers[`q${q.id}`];
+        if (val !== undefined && val !== "") {
+          el.value = val;
+          if (q.type === "scale") {
+            const label = document.getElementById(`val${q.id}`);
+            if (label) label.textContent = val;
+          }
+        }
+      });
+      const prenom = document.getElementById("participant-prenom");
+      const nom    = document.getElementById("participant-nom");
+      if (prenom && data.answers["prenom"]) prenom.value = data.answers["prenom"];
+      if (nom    && data.answers["nom"])    nom.value    = data.answers["nom"];
+    }
+    if (data.hints) {
+      hintsUsed = data.hints;
+      document.getElementById("hints-count").textContent = hintsUsed;
+    }
+  } catch(e) { /* ignore */ }
+}
 
 
 // Build pages
