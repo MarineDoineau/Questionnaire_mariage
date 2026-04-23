@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>L'Épreuve des Témoins</title>
+  <title>Les énigmes des mariés</title>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400&family=Outfit:wght@300;400;500&display=swap" rel="stylesheet" />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -209,11 +209,12 @@ const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwdnuzpn_P55SQP
 ══════════════════════════════════════════════════════ */
 const QUESTIONS = [
   // PAGE 1 — Q1 à Q5
-  { id:1,  page:1, question:"Énigme 1",  type:"text",  placeholder:"Votre réponse…", hint1:"Nous recherchons une adresse.", hint2:"Nous recherchons notre adresse.", hint3:"Nous habitons Villeneuve Tolosane." },
-  { id:2,  page:1, question:"Énigme 2",  type:"date",  hint1:"Date de naissance d'Amélia" },
-  { id:3,  page:1, question:"Énigme 3",  type:"text",  placeholder:"Votre réponse…", hint1:"Noms de nos deux chiennes" },
-  { id:4,  page:1, question:"Énigme 4",  type:"text",  placeholder:"Votre réponse…", hint1:"Sorcier célèbre" },
-  { id:5,  page:1, question:"Énigme 5",  type:"text",  placeholder:"Votre réponse…", hint1:"Expression célèbre, en lien avec la taille" },
+  { id:0,  page:1, question:"Qui êtes-vous ?",  type:"text",  placeholder:"Indiquez nous votre prénom pour qu'on puisse déterminer le vainqueur !"},
+  { id:1,  page:1, question:"Énigme 1",  type:"text",  placeholder:"Lieu", hint1:"Nous recherchons une adresse.", hint2:"Les chiffres représentent des coordonnées géographiques.", hint3:"Rentrez les coordonnées dans Google Maps." },
+  { id:2,  page:1, question:"Énigme 2",  type:"date",  hint1:"Les points permettent de distinguer le jour, le mois et l'année.",  hint2:"Creuser du côté des chiffres romains.", hint3:"Nous cherchons la date de naissance d'Amélia." },
+  { id:3,  page:1, question:"Énigme 3",  type:"text",  placeholder:"Deux prénoms", hint1:"Il s'agit d'un rébus.", hint2:"Noms de nos deux chiennes", hint3 :"La première ligne permet de faire 'Rebelle'" },
+  { id:4,  page:1, question:"Énigme 4",  type:"text",  placeholder:"Personnage de fiction", hint1:"Personnage principal d'un film qui parle de magie.", hint2:"Sorcier célèbre avec un cicatrice sur le front.", hint3:"Son prénom est Harry." },
+  { id:5,  page:1, question:"Énigme 5",  type:"text",  placeholder:"Expression", hint1:"Expression célèbre, en lien avec la taille", hint2:"Regardez le nombre de pommes.", hint3:"xxx comme xxx pommes" },
 
   // PAGE 2 — Q6 à Q11
   { id:6,  page:2, question:"Énigme 6",  type:"text",  placeholder:"Couleur…", hint1:"Couleur des cheveux de Clément" },
