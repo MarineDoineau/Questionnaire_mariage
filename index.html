@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Questionnaire</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400&family=Outfit:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg:        #f5f0e8;
+      --surface:   #fffcf7;
+      --border:    #e2d9cc;
+      --muted:     #a89880;
+      --text:      #221a10;
+      --accent:    #b07d4a;
+      --accent-lt: #f0e4d0;
+      --gold:      #c9954a;
+      --radius:    6px;
+      --shadow:    0 2px 20px rgba(34,26,16,.07);
+    }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Outfit', sans-serif;
+      font-weight: 300;
+      min-height: 100vh;
+    }
+    body::after {
+      content: '';
+      position: fixed; inset: 0; z-index: 999;
+      pointer-events: none; opacity: .025;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      background-size: 200px;
+    }
+    .shell { max-width: 680px; margin: 0 auto; padding: 2rem 1.25rem 5rem; }
+
+    /* HEADER */
+    .site-header { text-align: center; padding: 2rem 0 2.5rem; animation: fadeUp .7s ease both; }
+    .logo-wrap { display: inline-block; margin-bottom: .8rem; }
+    .logo-wrap img { max-height: 80px; max-width: 240px; object-fit: contain; }
+    .logo-text { font-family: 'Playfair Display', serif; font-size: 1.8rem; font-weight: 400; letter-spacing: .06em; }
+    .logo-text em { font-style: italic; color: var(--accent); }
+    .header-tagline { font-size: .75rem; letter-spacing: .18em; text-transform: uppercase; color: var(--muted); margin-top: .4rem; }
+
+    /* NAV */
+    .page-nav { display: flex; align-items: center; justify-content: center; gap: 0; margin-bottom: 2rem; flex-wrap: nowrap; animation: fadeUp .7s .05s ease both; }
+    .nav-step { display: flex; flex-direction: column; align-items: center; gap: .3rem; cursor: pointer; padding: .3rem .4rem; border-radius: var(--radius); transition: background .2s; }
+    .nav-step:hover { background: var(--accent-lt); }
+    .nav-dot {
+      width: 34px; height: 34px; border-radius: 50%;
+      border: 1.5px solid var(--border); background: var(--surface);
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Playfair Display', serif; font-size: .9rem; color: var(--muted);
+      transition: all .25s;
+    }
+    .nav-step.active .nav-dot { background: var(--accent); border-color: var(--accent); color: #fff; box-shadow: 0 2px 10px rgba(176,125,74,.35); }
+    .nav-step.done .nav-dot { background: var(--accent-lt); border-color: var(--accent); color: var(--accent); font-size: 0; }
+    .nav-step.done .nav-dot::after { content: '✓'; font-size: .85rem; font-family: 'Outfit', sans-serif; }
+    .nav-label { font-size: .62rem; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+    .nav-step.active .nav-label { color: var(--accent); font-weight: 500; }
+    .nav-line { width: 28px; height: 1px; background: var(--border); flex-shrink: 0; margin-bottom: 1.4rem; }
+
+    /* PROGRESS */
+    .progress-strip { height: 2px; background: var(--border); border-radius: 2px; margin-bottom: 1.6rem; overflow: hidden; animation: fadeUp .7s .1s ease both; }
+    .progress-fill { height: 100%; background: linear-gradient(90deg, var(--gold), var(--accent)); border-radius: 2px; transition: width .5s cubic-bezier(.4,0,.2,1); }
+
+    /* HINTS BADGE */
+    .hints-badge { font-size: .75rem; letter-spacing: .08em; color: var(--muted); text-align: center; margin-bottom: 1.5rem; }
+    .hints-badge b { color: var(--accent); font-weight: 400; font-family: 'Playfair Display', serif; font-size: .95rem; }
+
+    /* PAGES */
+    .page-block { display: none; }
+    .page-block.active { display: block; animation: slideIn .35s ease both; }
+    .page-block.going-back.active { animation: slideBack .35s ease both; }
+    @keyframes slideIn  { from { opacity:0; transform:translateX(18px); } to { opacity:1; transform:none; } }
+    @keyframes slideBack{ from { opacity:0; transform:translateX(-18px); } to { opacity:1; transform:none; } }
+
+    .page-title { font-family: 'Playfair Display', serif; font-size: 1rem; font-weight: 400; color: var(--muted); letter-spacing: .06em; margin-bottom: 1.2rem; padding-bottom: .7rem; border-bottom: 1px solid var(--border); }
+
+    /* CARDS */
+    .card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 1.6rem 1.8rem 1.4rem; margin-bottom: 1rem; box-shadow: var(--shadow); transition: box-shadow .2s; }
+    .card:hover { box-shadow: 0 4px 28px rgba(34,26,16,.1); }
+    .card-header { display: flex; align-items: flex-start; gap: .85rem; margin-bottom: 1.1rem; }
+    .q-num { flex-shrink:0; width:26px; height:26px; border:1px solid var(--gold); border-radius:50%; display:flex; align-items:center; justify-content:center; font-family:'Playfair Display',serif; font-size:.8rem; color:var(--gold); }
+    .q-title { font-family:'Playfair Display',serif; font-size:1.15rem; font-weight:400; line-height:1.35; }
+
+    /* INPUTS */
+    input[type="text"], input[type="date"] {
+      width:100%; padding:.65rem 1rem;
+      background:var(--bg); border:1px solid var(--border); border-radius:var(--radius);
+      font-family:'Outfit',sans-serif; font-size:.95rem; font-weight:300; color:var(--text);
+      outline:none; transition:border-color .2s, box-shadow .2s;
+    }
+    input[type="text"]:focus, input[type="date"]:focus { border-color:var(--gold); box-shadow:0 0 0 3px rgba(201,149,74,.13); }
+
+    /* SCALE */
+    .scale-wrap { display:flex; flex-direction:column; gap:.5rem; }
+    .scale-row  { display:flex; align-items:center; gap:.85rem; }
+    input[type="range"] { -webkit-appearance:none; flex:1; height:3px; background:var(--border); border-radius:2px; outline:none; cursor:pointer; }
+    input[type="range"]::-webkit-slider-thumb { -webkit-appearance:none; width:18px; height:18px; background:var(--gold); border-radius:50%; border:2px solid var(--surface); box-shadow:0 1px 5px rgba(0,0,0,.18); transition:transform .15s; }
+    input[type="range"]::-webkit-slider-thumb:hover { transform:scale(1.25); }
+    .scale-val   { min-width:2.2ch; text-align:center; font-family:'Playfair Display',serif; font-size:1.15rem; color:var(--gold); }
+    .scale-labels{ display:flex; justify-content:space-between; font-size:.7rem; color:var(--muted); padding:0 2px; }
+
+    /* HINTS */
+    .hint-section { margin-top:1rem; display:flex; flex-wrap:wrap; gap:.4rem; }
+    .hint-btn { display:inline-flex; align-items:center; gap:.35rem; background:none; border:1px solid var(--border); padding:.3rem .85rem; border-radius:20px; font-family:'Outfit',sans-serif; font-size:.75rem; letter-spacing:.05em; color:var(--muted); cursor:pointer; transition:all .2s; }
+    .hint-btn:hover, .hint-btn.used { border-color:var(--gold); color:var(--accent); }
+    .hint-text { width:100%; margin-top:.5rem; padding:.6rem .95rem; background:var(--accent-lt); border-left:2px solid var(--gold); border-radius:0 var(--radius) var(--radius) 0; font-size:.85rem; color:var(--accent); display:none; animation:fadeUp .25s ease; }
+    .hint-text.visible { display:block; }
+
+    /* BUTTONS */
+    .btn-row { display:flex; justify-content:space-between; align-items:center; margin-top:2rem; gap:1rem; }
+    .btn { padding:.75rem 2rem; border-radius:var(--radius); font-family:'Outfit',sans-serif; font-size:.85rem; font-weight:400; letter-spacing:.12em; text-transform:uppercase; cursor:pointer; transition:all .2s; border:none; }
+    .btn-prev { background:none; border:1px solid var(--border); color:var(--muted); }
+    .btn-prev:hover { border-color:var(--accent); color:var(--accent); }
+    .btn-next { background:var(--text); color:var(--bg); margin-left:auto; }
+    .btn-next:hover { background:var(--accent); }
+    .btn-submit { background:var(--accent); color:#fff; margin-left:auto; box-shadow:0 3px 12px rgba(176,125,74,.3); }
+    .btn-submit:hover { background:var(--gold); transform:translateY(-1px); }
+    .btn-submit:disabled { background:var(--muted); box-shadow:none; cursor:not-allowed; transform:none; }
+
+    /* RESULT */
+    #result-page { display:none; text-align:center; padding:5rem 1rem; animation:fadeUp .8s ease; }
+    #result-page .icon { font-size:3.2rem; margin-bottom:1.5rem; }
+    #result-page h2 { font-family:'Playfair Display',serif; font-size:2rem; font-weight:400; margin-bottom:.8rem; }
+    #result-page p { color:var(--muted); line-height:1.75; font-size:.95rem; }
+
+    @keyframes fadeUp { from { opacity:0; transform:translateY(14px); } to { opacity:1; transform:none; } }
+
+    @media (max-width:480px) {
+      .card { padding:1.2rem 1.1rem 1.1rem; }
+      .nav-line { width:14px; }
+      .btn { padding:.7rem 1.2rem; font-size:.78rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="shell">
+
+  <!-- ══════════════════════════════════════════════
+       HEADER — LOGO
+       👉 Mets ton fichier logo (ex: logo.png) dans
+          le même dossier que index.html sur GitHub.
+          Remplace "logo.png" ci-dessous par son nom.
+  ══════════════════════════════════════════════ -->
+  <header class="site-header">
+    <div class="logo-wrap">
+      <img src="logo.png" alt="Logo"
+           onerror="this.style.display='none';document.getElementById('logo-fallback').style.display='block'" />
+      <!-- Texte affiché si le logo ne charge pas -->
+      <div class="logo-text" id="logo-fallback" style="display:none">Prénom <em>&amp; Prénom</em></div>
+    </div>
+    <p class="header-tagline">Questionnaire · Répondez à votre rythme</p>
+  </header>
+
+  <div id="questionnaire-page">
+    <nav class="page-nav" id="page-nav"></nav>
+    <div class="progress-strip"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
+    <div class="hints-badge">Indices utilisés : <b id="hints-count">0</b></div>
+    <div id="pages-container"></div>
+  </div>
+
+  <div id="result-page">
+    <div class="icon">🎉</div>
+    <h2>Merci pour vos réponses !</h2>
+    <p>Tout a bien été enregistré.<br>On a hâte de les découvrir !</p>
+  </div>
+
+</div>
+
+<script>
+/* ══════════════════════════════════════════════════════
+   ① URL DE TON APPS SCRIPT
+   👉 Remplace la valeur ci-dessous après déploiement
+══════════════════════════════════════════════════════ */
+const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxXCb9Ons-XXZ-d21aceCrJNfg2Yg77dbdUBRHdyuRi9r0fA3mkFtobmhlB6KSAEfF1Ag/exec";
+
+/* ══════════════════════════════════════════════════════
+   ② TES 27 QUESTIONS
+   👉 Remplace les textes "Énigme X" par tes vraies
+      questions. Types : "text" | "date" | "scale"
+      hint1/hint2/hint3 sont optionnels.
+      page : 1 à 5 selon le découpage choisi.
+══════════════════════════════════════════════════════ */
+const QUESTIONS = [
+  // PAGE 1 — Q1 à Q5
+  { id:1,  page:1, question:"Énigme 1",  type:"text",  placeholder:"Votre réponse…", hint1:"Nous recherchons une adresse.", hint2:"Nous recherchons notre adresse.", hint3:"Nous habitons Villeneuve Tolosane." },
+  { id:2,  page:1, question:"Énigme 2",  type:"date",  hint1:"Date de naissance d'Amélia" },
+  { id:3,  page:1, question:"Énigme 3",  type:"text",  placeholder:"Votre réponse…", hint1:"Noms de nos deux chiennes" },
+  { id:4,  page:1, question:"Énigme 4",  type:"text",  placeholder:"Votre réponse…", hint1:"Sorcier célèbre" },
+  { id:5,  page:1, question:"Énigme 5",  type:"text",  placeholder:"Votre réponse…", hint1:"Expression célèbre, en lien avec la taille" },
+
+  // PAGE 2 — Q6 à Q11
+  { id:6,  page:2, question:"Énigme 6",  type:"text",  placeholder:"Couleur…", hint1:"Couleur des cheveux de Clément" },
+  { id:7,  page:2, question:"Énigme 7",  type:"scale", min:1, max:20, hint1:"1 = pas important, 20 = très important" },
+  { id:8,  page:2, question:"Énigme 8",  type:"scale", min:1, max:5,  hint1:"1 = pas important, 5 = très important" },
+  { id:9,  page:2, question:"Énigme 9",  type:"scale", min:1, max:5,  hint1:"1 = pas important, 5 = très important" },
+  { id:10, page:2, question:"Énigme 10", type:"scale", min:1, max:5,  hint1:"1 = pas important, 5 = très important" },
+  { id:11, page:2, question:"Énigme 11", type:"text",  placeholder:"Votre réponse…" },
+
+  // PAGE 3 — Q12 à Q16
+  { id:12, page:3, question:"Énigme 12", type:"text",  placeholder:"Votre réponse…" },
+  { id:13, page:3, question:"Énigme 13", type:"date"  },
+  { id:14, page:3, question:"Énigme 14", type:"text",  placeholder:"Votre réponse…" },
+  { id:15, page:3, question:"Énigme 15", type:"scale", min:1, max:10 },
+  { id:16, page:3, question:"Énigme 16", type:"text",  placeholder:"Votre réponse…" },
+
+  // PAGE 4 — Q17 à Q22
+  { id:17, page:4, question:"Énigme 17", type:"scale", min:1, max:5  },
+  { id:18, page:4, question:"Énigme 18", type:"text",  placeholder:"Votre réponse…" },
+  { id:19, page:4, question:"Énigme 19", type:"text",  placeholder:"Votre réponse…" },
+  { id:20, page:4, question:"Énigme 20", type:"scale", min:1, max:10 },
+  { id:21, page:4, question:"Énigme 21", type:"text",  placeholder:"Votre réponse…" },
+  { id:22, page:4, question:"Énigme 22", type:"date"  },
+
+  // PAGE 5 — Q23 à Q27
+  { id:23, page:5, question:"Énigme 23", type:"text",  placeholder:"Votre réponse…" },
+  { id:24, page:5, question:"Énigme 24", type:"scale", min:1, max:5  },
+  { id:25, page:5, question:"Énigme 25", type:"text",  placeholder:"Votre réponse…" },
+  { id:26, page:5, question:"Énigme 26", type:"scale", min:1, max:20 },
+  { id:27, page:5, question:"Énigme 27", type:"text",  placeholder:"Votre réponse…" },
+];
+
+/* ══════════════════════════════════════════════════════
+   ③ LOGIQUE — ne pas modifier sauf si tu sais ce que tu fais
+══════════════════════════════════════════════════════ */
+const TOTAL_PAGES = 5;
+let currentPage = 1;
+let hintsUsed = 0;
+
+// Build pages
+const container = document.getElementById("pages-container");
+for (let p = 1; p <= TOTAL_PAGES; p++) {
+  const pageEl = document.createElement("div");
+  pageEl.className = "page-block" + (p === 1 ? " active" : "");
+  pageEl.id = `page-${p}`;
+
+  const qs = QUESTIONS.filter(q => q.page === p);
+  const firstId = qs[0].id, lastId = qs[qs.length-1].id;
+
+  pageEl.innerHTML = `<div class="page-title">Partie ${p} — questions ${firstId} à ${lastId}</div>`;
+
+  qs.forEach(q => {
+    const card = document.createElement("div");
+    card.className = "card";
+    card.innerHTML = `<div class="card-header"><div class="q-num">${q.id}</div><div class="q-title">${q.question}</div></div>`;
+
+    const iw = document.createElement("div");
+    if (q.type === "text") {
+      iw.innerHTML = `<input type="text" id="q${q.id}" placeholder="${q.placeholder||''}" oninput="updateProgress()" autocomplete="off" />`;
+    } else if (q.type === "date") {
+      iw.innerHTML = `<input type="date" id="q${q.id}" onchange="updateProgress()" />`;
+    } else {
+      const mid = Math.round((q.min + q.max) / 2);
+      iw.innerHTML = `<div class="scale-wrap"><div class="scale-row"><input type="range" id="q${q.id}" min="${q.min}" max="${q.max}" value="${mid}" oninput="document.getElementById('val${q.id}').textContent=this.value;updateProgress()" /><span class="scale-val" id="val${q.id}">${mid}</span></div><div class="scale-labels"><span>${q.min}</span><span>${q.max}</span></div></div>`;
+    }
+    card.appendChild(iw);
+
+    const hints = [q.hint1, q.hint2, q.hint3].filter(Boolean);
+    if (hints.length) {
+      const hs = document.createElement("div");
+      hs.className = "hint-section";
+      hints.forEach((h, i) => {
+        const hid = `hint-${q.id}-${i}`;
+        const btn = document.createElement("button");
+        btn.type = "button"; btn.className = "hint-btn";
+        btn.dataset.hid = hid; btn.dataset.used = "false";
+        btn.textContent = `💡 Indice ${i+1}`;
+        btn.onclick = () => revealHint(btn, hid);
+        const txt = document.createElement("div");
+        txt.className = "hint-text"; txt.id = hid; txt.textContent = h;
+        hs.appendChild(btn); hs.appendChild(txt);
+      });
+      card.appendChild(hs);
+    }
+    pageEl.appendChild(card);
+  });
+
+  // Buttons
+  const row = document.createElement("div");
+  row.className = "btn-row";
+  if (p > 1) {
+    const b = document.createElement("button");
+    b.type="button"; b.className="btn btn-prev"; b.textContent="← Précédent";
+    b.onclick=()=>goToPage(p-1, true);
+    row.appendChild(b);
+  }
+  if (p < TOTAL_PAGES) {
+    const b = document.createElement("button");
+    b.type="button"; b.className="btn btn-next"; b.textContent="Suivant →";
+    b.onclick=()=>goToPage(p+1, false);
+    row.appendChild(b);
+  } else {
+    const b = document.createElement("button");
+    b.type="button"; b.className="btn btn-submit"; b.id="submit-btn"; b.textContent="Envoyer mes réponses";
+    b.onclick=submitForm;
+    row.appendChild(b);
+  }
+  pageEl.appendChild(row);
+  container.appendChild(pageEl);
+}
+
+// Build nav
+const navEl = document.getElementById("page-nav");
+for (let p = 1; p <= TOTAL_PAGES; p++) {
+  if (p > 1) { const l=document.createElement("div"); l.className="nav-line"; navEl.appendChild(l); }
+  const s = document.createElement("div");
+  s.className = "nav-step" + (p===1?" active":"");
+  s.id = `nav-${p}`;
+  s.innerHTML = `<div class="nav-dot">${p}</div><span class="nav-label">Partie ${p}</span>`;
+  s.onclick = () => goToPage(p, p < currentPage);
+  navEl.appendChild(s);
+}
+
+function updateNav() {
+  for (let p=1; p<=TOTAL_PAGES; p++) {
+    const s = document.getElementById(`nav-${p}`);
+    s.className = "nav-step" + (p===currentPage?" active": p<currentPage?" done":"");
+  }
+}
+
+function goToPage(target, back) {
+  if (target<1||target>TOTAL_PAGES) return;
+  document.getElementById(`page-${currentPage}`).classList.remove("active");
+  const newEl = document.getElementById(`page-${target}`);
+  newEl.classList.toggle("going-back", back);
+  newEl.classList.add("active");
+  currentPage = target;
+  updateNav();
+  updateProgress();
+  window.scrollTo({top:0, behavior:"smooth"});
+}
+
+function revealHint(btn, hid) {
+  if (btn.dataset.used === "false") {
+    btn.dataset.used = "true"; btn.classList.add("used");
+    hintsUsed++;
+    document.getElementById("hints-count").textContent = hintsUsed;
+  }
+  document.getElementById(hid).classList.toggle("visible");
+}
+
+function updateProgress() {
+  let filled = 0;
+  QUESTIONS.forEach(q => {
+    const el = document.getElementById(`q${q.id}`);
+    if (!el) return;
+    if (q.type==="scale" || (el.value && el.value.trim())) filled++;
+  });
+  document.getElementById("progress-fill").style.width = Math.round(filled/QUESTIONS.length*100)+"%";
+}
+updateProgress();
+
+async function submitForm() {
+  const btn = document.getElementById("submit-btn");
+  btn.disabled=true; btn.textContent="Envoi en cours…";
+  const payload = {hints_used: hintsUsed};
+  QUESTIONS.forEach(q => { payload[`q${q.id}`] = document.getElementById(`q${q.id}`)?.value||""; });
+  try {
+    await fetch(APPS_SCRIPT_URL, {method:"POST", mode:"no-cors", headers:{"Content-Type":"application/json"}, body:JSON.stringify(payload)});
+    document.getElementById("questionnaire-page").style.display="none";
+    document.getElementById("result-page").style.display="block";
+    window.scrollTo({top:0, behavior:"smooth"});
+  } catch(e) {
+    alert("Erreur lors de l'envoi. Vérifie ta connexion et réessaie.");
+    btn.disabled=false; btn.textContent="Envoyer mes réponses";
+  }
+}
+</script>
+</body>
+</html>
