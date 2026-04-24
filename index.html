@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Les énigmes des mariés</title>
+  <title>L'Épreuve des Témoins</title>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400&family=Outfit:wght@300;400;500&display=swap" rel="stylesheet" />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -19,103 +19,69 @@
       --radius:    6px;
       --shadow:    0 2px 20px rgba(34,26,16,.07);
     }
-    body {
-      background: var(--bg);
-      color: var(--text);
-      font-family: 'Outfit', sans-serif;
-      font-weight: 300;
-      min-height: 100vh;
-    }
-    body::after {
-      content: '';
-      position: fixed; inset: 0; z-index: 999;
-      pointer-events: none; opacity: .025;
-      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-      background-size: 200px;
-    }
-    .shell { max-width: 680px; margin: 0 auto; padding: 2rem 1.25rem 5rem; }
+    body { background:var(--bg); color:var(--text); font-family:'Outfit',sans-serif; font-weight:300; min-height:100vh; }
+    body::after { content:''; position:fixed; inset:0; z-index:999; pointer-events:none; opacity:.025;
+      background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      background-size:200px; }
+
+    .shell { max-width:680px; margin:0 auto; padding:2rem 1.25rem 5rem; }
 
     /* HEADER */
-    .site-header { text-align: center; padding: 2rem 0 2.5rem; animation: fadeUp .7s ease both; }
-    .logo-wrap { display: inline-block; margin-bottom: .8rem; }
-    .logo-wrap img { max-height: 80px; max-width: 240px; object-fit: contain; }
-    .logo-text { font-family: 'Playfair Display', serif; font-size: 1.8rem; font-weight: 400; letter-spacing: .06em; }
-    .logo-text em { font-style: italic; color: var(--accent); }
-    .header-tagline { font-size: .75rem; letter-spacing: .18em; text-transform: uppercase; color: var(--muted); margin-top: .4rem; }
+    .site-header { text-align:center; padding:2rem 0 2.5rem; animation:fadeUp .7s ease both; }
+    .logo-wrap { display:inline-block; margin-bottom:.8rem; }
+    .logo-wrap img { max-height:80px; max-width:240px; object-fit:contain; }
+    .logo-text { font-family:'Playfair Display',serif; font-size:1.8rem; font-weight:400; letter-spacing:.06em; }
+    .logo-text em { font-style:italic; color:var(--accent); }
+    .header-tagline { font-size:.75rem; letter-spacing:.18em; text-transform:uppercase; color:var(--muted); margin-top:.4rem; }
 
-    /* NAV */
-    .page-nav { display: flex; align-items: center; justify-content: center; gap: 0; margin-bottom: 2rem; flex-wrap: nowrap; animation: fadeUp .7s .05s ease both; }
-    .nav-step { display: flex; flex-direction: column; align-items: center; gap: .3rem; cursor: pointer; padding: .3rem .4rem; border-radius: var(--radius); transition: background .2s; }
-    .nav-step:hover { background: var(--accent-lt); }
-    .nav-dot {
-      width: 34px; height: 34px; border-radius: 50%;
-      border: 1.5px solid var(--border); background: var(--surface);
-      display: flex; align-items: center; justify-content: center;
-      font-family: 'Playfair Display', serif; font-size: .9rem; color: var(--muted);
-      transition: all .25s;
-    }
-    .nav-step.active .nav-dot { background: var(--accent); border-color: var(--accent); color: #fff; box-shadow: 0 2px 10px rgba(176,125,74,.35); }
-    .nav-step.done .nav-dot { background: var(--accent-lt); border-color: var(--accent); color: var(--accent); font-size: 0; }
-    .nav-step.done .nav-dot::after { content: '✓'; font-size: .85rem; font-family: 'Outfit', sans-serif; }
-    .nav-label { font-size: .62rem; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
-    .nav-step.active .nav-label { color: var(--accent); font-weight: 500; }
-    .nav-line { width: 28px; height: 1px; background: var(--border); flex-shrink: 0; margin-bottom: 1.4rem; }
+    /* NAV BAR */
+    .page-nav { display:flex; align-items:center; justify-content:center; margin-bottom:2rem; flex-wrap:nowrap; animation:fadeUp .7s .05s ease both; }
+    .nav-step { display:flex; flex-direction:column; align-items:center; gap:.3rem; cursor:pointer; padding:.3rem .4rem; border-radius:var(--radius); transition:background .2s; flex-shrink:0; }
+    .nav-step:hover { background:var(--accent-lt); }
+    .nav-dot { width:34px; height:34px; border-radius:50%; border:1.5px solid var(--border); background:var(--surface); display:flex; align-items:center; justify-content:center; font-family:'Playfair Display',serif; font-size:.9rem; color:var(--muted); transition:all .25s; }
+    .nav-step.active .nav-dot { background:var(--accent); border-color:var(--accent); color:#fff; box-shadow:0 2px 10px rgba(176,125,74,.35); }
+    .nav-step.done .nav-dot { background:var(--accent-lt); border-color:var(--accent); color:var(--accent); font-size:0; }
+    .nav-step.done .nav-dot::after { content:'✓'; font-size:.85rem; font-family:'Outfit',sans-serif; }
+    .nav-label { font-size:.62rem; letter-spacing:.08em; text-transform:uppercase; color:var(--muted); }
+    .nav-step.active .nav-label { color:var(--accent); font-weight:500; }
+    .nav-line { width:24px; height:1px; background:var(--border); flex-shrink:0; margin-bottom:1.4rem; }
 
     /* PROGRESS */
-    .progress-strip { height: 2px; background: var(--border); border-radius: 2px; margin-bottom: 1.6rem; overflow: hidden; animation: fadeUp .7s .1s ease both; }
-    .progress-fill { height: 100%; background: linear-gradient(90deg, var(--gold), var(--accent)); border-radius: 2px; transition: width .5s cubic-bezier(.4,0,.2,1); }
+    .progress-strip { height:2px; background:var(--border); border-radius:2px; margin-bottom:1.6rem; overflow:hidden; animation:fadeUp .7s .1s ease both; }
+    .progress-fill { height:100%; background:linear-gradient(90deg,var(--gold),var(--accent)); border-radius:2px; transition:width .5s cubic-bezier(.4,0,.2,1); }
 
     /* HINTS BADGE */
-    .hints-badge { font-size: .75rem; letter-spacing: .08em; color: var(--muted); text-align: center; margin-bottom: 1.5rem; }
-    .hints-badge b { color: var(--accent); font-weight: 400; font-family: 'Playfair Display', serif; font-size: .95rem; }
+    .hints-badge { font-size:.75rem; letter-spacing:.08em; color:var(--muted); text-align:center; margin-bottom:1.5rem; }
+    .hints-badge b { color:var(--accent); font-weight:400; font-family:'Playfair Display',serif; font-size:.95rem; }
 
     /* PAGES */
-    .page-block { display: none; }
-    .page-block.active { display: block; animation: slideIn .35s ease both; }
-    .page-block.going-back.active { animation: slideBack .35s ease both; }
+    .page-block { display:none; }
+    .page-block.active { display:block; animation:slideIn .35s ease both; }
+    .page-block.going-back.active { animation:slideBack .35s ease both; }
     @keyframes slideIn  { from { opacity:0; transform:translateX(18px); } to { opacity:1; transform:none; } }
     @keyframes slideBack{ from { opacity:0; transform:translateX(-18px); } to { opacity:1; transform:none; } }
 
-    .page-title { font-family: 'Playfair Display', serif; font-size: 1rem; font-weight: 400; color: var(--muted); letter-spacing: .06em; margin-bottom: 1.2rem; padding-bottom: .7rem; border-bottom: 1px solid var(--border); }
+    .page-title { font-family:'Playfair Display',serif; font-size:1rem; font-weight:400; color:var(--muted); letter-spacing:.06em; margin-bottom:1.2rem; padding-bottom:.7rem; border-bottom:1px solid var(--border); }
 
     /* CARDS */
-    .card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 1.6rem 1.8rem 1.4rem; margin-bottom: 1rem; box-shadow: var(--shadow); transition: box-shadow .2s; }
-    .card:hover { box-shadow: 0 4px 28px rgba(34,26,16,.1); }
-    .card-header { display: flex; align-items: flex-start; gap: .85rem; margin-bottom: 1.1rem; }
+    .card { background:var(--surface); border:1px solid var(--border); border-radius:10px; padding:1.6rem 1.8rem 1.4rem; margin-bottom:1rem; box-shadow:var(--shadow); transition:box-shadow .2s; }
+    .card:hover { box-shadow:0 4px 28px rgba(34,26,16,.1); }
+    .card-header { display:flex; align-items:flex-start; gap:.85rem; margin-bottom:1.1rem; }
     .q-num { flex-shrink:0; width:26px; height:26px; border:1px solid var(--gold); border-radius:50%; display:flex; align-items:center; justify-content:center; font-family:'Playfair Display',serif; font-size:.8rem; color:var(--gold); }
     .q-title { font-family:'Playfair Display',serif; font-size:1.15rem; font-weight:400; line-height:1.35; }
 
     /* INPUTS */
     input[type="text"], input[type="date"] {
-      width:100%; padding:.65rem 1rem;
-      background:var(--bg); border:1px solid var(--border); border-radius:var(--radius);
-      font-family:'Outfit',sans-serif; font-size:.95rem; font-weight:300; color:var(--text);
-      outline:none; transition:border-color .2s, box-shadow .2s;
+      width:100%; padding:.65rem 1rem; background:var(--bg); border:1px solid var(--border); border-radius:var(--radius);
+      font-family:'Outfit',sans-serif; font-size:.95rem; font-weight:300; color:var(--text); outline:none; transition:border-color .2s,box-shadow .2s;
     }
     input[type="text"]:focus, input[type="date"]:focus { border-color:var(--gold); box-shadow:0 0 0 3px rgba(201,149,74,.13); }
-
     textarea {
-      width:100%; padding:.65rem 1rem;
-      background:var(--bg); border:1px solid var(--border); border-radius:var(--radius);
-      font-family:'Outfit',sans-serif; font-size:.95rem; font-weight:300; color:var(--text);
-      outline:none; resize:vertical; min-height:100px; line-height:1.6;
-      transition:border-color .2s, box-shadow .2s;
+      width:100%; padding:.65rem 1rem; background:var(--bg); border:1px solid var(--border); border-radius:var(--radius);
+      font-family:'Outfit',sans-serif; font-size:.95rem; font-weight:300; color:var(--text); outline:none;
+      resize:vertical; min-height:110px; line-height:1.65; transition:border-color .2s,box-shadow .2s;
     }
     textarea:focus { border-color:var(--gold); box-shadow:0 0 0 3px rgba(201,149,74,.13); }
-
-    /* IDENTITY CARD */
-    .identity-card {
-      background: var(--accent-lt);
-      border: 1px solid var(--gold);
-      border-radius: 10px;
-      padding: 1.6rem 1.8rem;
-      margin-bottom: 1rem;
-      box-shadow: var(--shadow);
-    }
-    .identity-card .card-header { margin-bottom: 1.2rem; }
-    .identity-row { display: flex; gap: .8rem; }
-    .identity-row input { flex: 1; }
-    @media (max-width:480px) { .identity-row { flex-direction: column; } }
 
     /* SCALE */
     .scale-wrap { display:flex; flex-direction:column; gap:.5rem; }
@@ -123,8 +89,8 @@
     input[type="range"] { -webkit-appearance:none; flex:1; height:3px; background:var(--border); border-radius:2px; outline:none; cursor:pointer; }
     input[type="range"]::-webkit-slider-thumb { -webkit-appearance:none; width:18px; height:18px; background:var(--gold); border-radius:50%; border:2px solid var(--surface); box-shadow:0 1px 5px rgba(0,0,0,.18); transition:transform .15s; }
     input[type="range"]::-webkit-slider-thumb:hover { transform:scale(1.25); }
-    .scale-val   { min-width:2.2ch; text-align:center; font-family:'Playfair Display',serif; font-size:1.15rem; color:var(--gold); }
-    .scale-labels{ display:flex; justify-content:space-between; font-size:.7rem; color:var(--muted); padding:0 2px; }
+    .scale-val    { min-width:2.2ch; text-align:center; font-family:'Playfair Display',serif; font-size:1.15rem; color:var(--gold); }
+    .scale-labels { display:flex; justify-content:space-between; font-size:.7rem; color:var(--muted); padding:0 2px; }
 
     /* HINTS */
     .hint-section { margin-top:1rem; display:flex; flex-wrap:wrap; gap:.4rem; }
@@ -132,6 +98,14 @@
     .hint-btn:hover, .hint-btn.used { border-color:var(--gold); color:var(--accent); }
     .hint-text { width:100%; margin-top:.5rem; padding:.6rem .95rem; background:var(--accent-lt); border-left:2px solid var(--gold); border-radius:0 var(--radius) var(--radius) 0; font-size:.85rem; color:var(--accent); display:none; animation:fadeUp .25s ease; }
     .hint-text.visible { display:block; }
+
+    /* WELCOME CARD (page 0) */
+    .welcome-card { background:var(--surface); border:1px solid var(--gold); border-radius:12px; padding:2.2rem 2rem; margin-bottom:1.5rem; box-shadow:var(--shadow); text-align:center; }
+    .welcome-card .ornament { font-size:1.4rem; color:var(--gold); letter-spacing:.3em; margin-bottom:1rem; display:block; }
+    .welcome-card h2 { font-family:'Playfair Display',serif; font-size:1.6rem; font-weight:400; margin-bottom:.5rem; }
+    .welcome-card p  { color:var(--muted); font-size:.9rem; line-height:1.7; margin-bottom:1.5rem; }
+    .welcome-input-wrap { max-width:320px; margin:0 auto; }
+    .welcome-input-wrap label { display:block; font-size:.75rem; letter-spacing:.12em; text-transform:uppercase; color:var(--muted); margin-bottom:.5rem; }
 
     /* BUTTONS */
     .btn-row { display:flex; justify-content:space-between; align-items:center; margin-top:2rem; gap:1rem; }
@@ -151,10 +125,9 @@
     #result-page p { color:var(--muted); line-height:1.75; font-size:.95rem; }
 
     @keyframes fadeUp { from { opacity:0; transform:translateY(14px); } to { opacity:1; transform:none; } }
-
     @media (max-width:480px) {
       .card { padding:1.2rem 1.1rem 1.1rem; }
-      .nav-line { width:14px; }
+      .nav-line { width:12px; }
       .btn { padding:.7rem 1.2rem; font-size:.78rem; }
     }
   </style>
@@ -164,157 +137,181 @@
 
   <!-- ══════════════════════════════════════════════
        HEADER — LOGO
-       👉 Mets ton fichier logo (ex: logo.png) dans
-          le même dossier que index.html sur GitHub.
-          Remplace "logo.png" ci-dessous par son nom.
+       👉 Place ton fichier logo dans le même dossier
+          que index.html et remplace "logo.png" par son nom.
   ══════════════════════════════════════════════ -->
   <header class="site-header">
     <div class="logo-wrap">
       <img src="logo.png" alt="Logo"
            onerror="this.style.display='none';document.getElementById('logo-fallback').style.display='block'" />
-      <!-- Texte affiché si le logo ne charge pas -->
       <div class="logo-text" id="logo-fallback" style="display:none">Prénom <em>&amp; Prénom</em></div>
     </div>
-    <p class="header-tagline">Les énigmes des mariés</p>
+    <p class="header-tagline">L'Épreuve des Témoins · Répondez à votre rythme</p>
   </header>
 
   <div id="questionnaire-page">
     <nav class="page-nav" id="page-nav"></nav>
     <div class="progress-strip"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
-    <div class="hints-badge">Indices utilisés : <b id="hints-count">0</b></div>
+    <div class="hints-badge" id="hints-badge" style="display:none">Indices utilisés : <b id="hints-count">0</b></div>
     <div id="pages-container"></div>
   </div>
 
   <div id="result-page">
     <div class="icon">🎉</div>
-    <h2>Merci pour vos réponses !</h2>
+    <h2 id="result-title">Merci pour vos réponses !</h2>
     <p>Tout a bien été enregistré.<br>On a hâte de les découvrir !</p>
   </div>
 
 </div>
 
 <script>
-  document.addEventListener("DOMContentLoaded", function() {
 /* ══════════════════════════════════════════════════════
    ① URL DE TON APPS SCRIPT
-   👉 Remplace la valeur ci-dessous après déploiement
+   👉 Remplace après déploiement
 ══════════════════════════════════════════════════════ */
-const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwdnuzpn_P55SQPD5OMpmyCDuViT9w2FQsmiAGLZ30W7-I4k4H1UhdN9KTnMmCFXqAQUQ/exec";
+const APPS_SCRIPT_URL = "COLLE_ICI_TON_URL_APPS_SCRIPT";
 
 /* ══════════════════════════════════════════════════════
    ② TES 27 QUESTIONS
-   👉 Remplace les textes "Énigme X" par tes vraies
-      questions. Types : "text" | "date" | "scale"
-      hint1/hint2/hint3 sont optionnels.
-      page : 1 à 5 selon le découpage choisi.
+   👉 Remplace "Énigme X" par tes vraies questions.
+      Types : "text" | "date" | "scale" | "textarea"
+      hint1 / hint2 / hint3 sont optionnels.
 ══════════════════════════════════════════════════════ */
 const QUESTIONS = [
   // PAGE 1 — Q1 à Q5
-  { id:0,  page:1, question:"Qui êtes-vous ?",  type:"text",  placeholder:"Indiquez nous votre prénom pour qu'on puisse déterminer le vainqueur !"},
-  { id:1,  page:1, question:"Énigme 1",  type:"text",  placeholder:"Lieu", hint1:"Nous recherchons une adresse.", hint2:"Les chiffres représentent des coordonnées géographiques.", hint3:"Rentrez les coordonnées dans Google Maps." },
-  { id:2,  page:1, question:"Énigme 2",  type:"date",  hint1:"Les points permettent de distinguer le jour, le mois et l'année.",  hint2:"Creuser du côté des chiffres romains.", hint3:"Nous cherchons la date de naissance d'Amélia." },
-  { id:3,  page:1, question:"Énigme 3",  type:"text",  placeholder:"Deux prénoms", hint1:"Il s'agit d'un rébus.", hint2:"Noms de nos deux chiennes", hint3 :"La première ligne permet de faire 'Rebelle'" },
-  { id:4,  page:1, question:"Énigme 4",  type:"text",  placeholder:"Personnage de fiction", hint1:"Personnage principal d'un film qui parle de magie.", hint2:"Sorcier célèbre avec un cicatrice sur le front.", hint3:"Son prénom est Harry." },
-  { id:5,  page:1, question:"Énigme 5",  type:"text",  placeholder:"Expression", hint1:"Expression célèbre, en lien avec la taille", hint2:"Regardez le nombre de pommes.", hint3:"xxx comme xxx pommes" },
+  { id:1,  page:1, question:"Énigme 1",  type:"text",     placeholder:"Votre réponse…", hint1:"Nous recherchons une adresse.", hint2:"Nous recherchons notre adresse.", hint3:"Nous habitons Villeneuve Tolosane." },
+  { id:2,  page:1, question:"Énigme 2",  type:"date",     hint1:"Date de naissance d'Amélia" },
+  { id:3,  page:1, question:"Énigme 3",  type:"text",     placeholder:"Votre réponse…", hint1:"Noms de nos deux chiennes" },
+  { id:4,  page:1, question:"Énigme 4",  type:"text",     placeholder:"Votre réponse…", hint1:"Sorcier célèbre" },
+  { id:5,  page:1, question:"Énigme 5",  type:"text",     placeholder:"Votre réponse…", hint1:"Expression célèbre, en lien avec la taille" },
 
   // PAGE 2 — Q6 à Q11
-  { id:6,  page:2, question:"Énigme 6",  type:"text",  placeholder:"Couleur…", hint1:"Couleur des cheveux de Clément" },
-  { id:7,  page:2, question:"Énigme 7",  type:"scale", min:1, max:20, hint1:"1 = pas important, 20 = très important" },
-  { id:8,  page:2, question:"Énigme 8",  type:"scale", min:1, max:5,  hint1:"1 = pas important, 5 = très important" },
-  { id:9,  page:2, question:"Énigme 9",  type:"scale", min:1, max:5,  hint1:"1 = pas important, 5 = très important" },
-  { id:10, page:2, question:"Énigme 10", type:"scale", min:1, max:5,  hint1:"1 = pas important, 5 = très important" },
-  { id:11, page:2, question:"Énigme 11", type:"text",  placeholder:"Votre réponse…" },
+  { id:6,  page:2, question:"Énigme 6",  type:"text",     placeholder:"Couleur…",       hint1:"Couleur des cheveux de Clément" },
+  { id:7,  page:2, question:"Énigme 7",  type:"scale",    min:1, max:20, hint1:"1 = pas important, 20 = très important" },
+  { id:8,  page:2, question:"Énigme 8",  type:"scale",    min:1, max:5,  hint1:"1 = pas important, 5 = très important" },
+  { id:9,  page:2, question:"Énigme 9",  type:"scale",    min:1, max:5,  hint1:"1 = pas important, 5 = très important" },
+  { id:10, page:2, question:"Énigme 10", type:"scale",    min:1, max:5,  hint1:"1 = pas important, 5 = très important" },
+  { id:11, page:2, question:"Énigme 11", type:"text",     placeholder:"Votre réponse…" },
 
   // PAGE 3 — Q12 à Q16
-  { id:12, page:3, question:"Énigme 12", type:"text",  placeholder:"Votre réponse…" },
-  { id:13, page:3, question:"Énigme 13", type:"date"  },
-  { id:14, page:3, question:"Énigme 14", type:"text",  placeholder:"Votre réponse…" },
-  { id:15, page:3, question:"Énigme 15", type:"scale", min:1, max:10 },
-  { id:16, page:3, question:"Énigme 16", type:"text",  placeholder:"Votre réponse…" },
+  { id:12, page:3, question:"Énigme 12", type:"text",     placeholder:"Votre réponse…" },
+  { id:13, page:3, question:"Énigme 13", type:"date" },
+  { id:14, page:3, question:"Énigme 14", type:"text",     placeholder:"Votre réponse…" },
+  { id:15, page:3, question:"Énigme 15", type:"scale",    min:1, max:10 },
+  { id:16, page:3, question:"Énigme 16", type:"text",     placeholder:"Votre réponse…" },
 
   // PAGE 4 — Q17 à Q22
-  { id:17, page:4, question:"Énigme 17", type:"scale", min:1, max:5  },
-  { id:18, page:4, question:"Énigme 18", type:"text",  placeholder:"Votre réponse…" },
-  { id:19, page:4, question:"Énigme 19", type:"text",  placeholder:"Votre réponse…" },
-  { id:20, page:4, question:"Énigme 20", type:"scale", min:1, max:10 },
-  { id:21, page:4, question:"Énigme 21", type:"text",  placeholder:"Votre réponse…" },
-  { id:22, page:4, question:"Énigme 22", type:"date"  },
+  { id:17, page:4, question:"Énigme 17", type:"scale",    min:1, max:5 },
+  { id:18, page:4, question:"Énigme 18", type:"text",     placeholder:"Votre réponse…" },
+  { id:19, page:4, question:"Énigme 19", type:"text",     placeholder:"Votre réponse…" },
+  { id:20, page:4, question:"Énigme 20", type:"scale",    min:1, max:10 },
+  { id:21, page:4, question:"Énigme 21", type:"text",     placeholder:"Votre réponse…" },
+  { id:22, page:4, question:"Énigme 22", type:"date" },
 
-  // PAGE 5 — Q23 à Q27 + question finale + identité
-  { id:23, page:5, question:"Énigme 23", type:"text",  placeholder:"Votre réponse…" },
-  { id:24, page:5, question:"Énigme 24", type:"scale", min:1, max:5  },
-  { id:25, page:5, question:"Énigme 25", type:"text",  placeholder:"Votre réponse…" },
-  { id:26, page:5, question:"Énigme 26", type:"scale", min:1, max:20 },
-  { id:27, page:5, question:"Énigme 27", type:"text",  placeholder:"Votre réponse…" },
-  { id:28, page:5, question:"En quelques mots, qu'avez-vous retenu de cette aventure ? Une surprise, une difficulté, un souvenir ?", type:"textarea", placeholder:"Vos impressions libres…" },
+  // PAGE 5 — Q23 à Q28
+  { id:23, page:5, question:"Énigme 23", type:"text",     placeholder:"Votre réponse…" },
+  { id:24, page:5, question:"Énigme 24", type:"scale",    min:1, max:5 },
+  { id:25, page:5, question:"Énigme 25", type:"text",     placeholder:"Votre réponse…" },
+  { id:26, page:5, question:"Énigme 26", type:"scale",    min:1, max:20 },
+  { id:27, page:5, question:"Énigme 27", type:"text",     placeholder:"Votre réponse…" },
+  { id:28, page:5, question:"En quelques mots, qu'avez-vous retenu de cette aventure ? Une surprise, une difficulté, un moment inattendu ?", type:"textarea", placeholder:"Vos impressions, en toute liberté…" },
 ];
 
 /* ══════════════════════════════════════════════════════
-   ③ LOGIQUE — ne pas modifier sauf si tu sais ce que tu fais
+   ③ STATE
 ══════════════════════════════════════════════════════ */
+// Pages : 0 = accueil/identité, 1-5 = questions, 6 = résultat
 const TOTAL_PAGES = 5;
-let currentPage = 1;
+const STORAGE_KEY = "epreuve_temoins_v2";
+let currentPage = 0;
 let hintsUsed = 0;
-const STORAGE_KEY = "questionnaire_answers";
 
-// Sauvegarde toutes les réponses dans localStorage
+/* ══════════════════════════════════════════════════════
+   ④ LOCALSTORAGE
+══════════════════════════════════════════════════════ */
 function saveToStorage() {
-  const data = { hints: hintsUsed, answers: {} };
+  const data = { page: currentPage, hints: hintsUsed, answers: {} };
+  // identité
+  const prenomEl = document.getElementById("participant-prenom");
+  if (prenomEl) data.answers["prenom"] = prenomEl.value;
+  // questions
   QUESTIONS.forEach(q => {
     const el = document.getElementById(`q${q.id}`);
     if (el) data.answers[`q${q.id}`] = el.value;
   });
-  const prenom = document.getElementById("participant-prenom");
-  const nom    = document.getElementById("participant-nom");
-  if (prenom) data.answers["prenom"] = prenom.value;
-  if (nom)    data.answers["nom"]    = nom.value;
   localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
 }
 
-// Restaure les réponses au chargement
 function restoreFromStorage() {
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
     if (!raw) return;
     const data = JSON.parse(raw);
-    if (data.answers) {
-      QUESTIONS.forEach(q => {
-        const el = document.getElementById(`q${q.id}`);
-        if (!el) return;
-        const val = data.answers[`q${q.id}`];
-        if (val !== undefined && val !== "") {
-          el.value = val;
-          if (q.type === "scale") {
-            const label = document.getElementById(`val${q.id}`);
-            if (label) label.textContent = val;
-          }
+    if (!data.answers) return;
+    // identité
+    const prenomEl = document.getElementById("participant-prenom");
+    if (prenomEl && data.answers["prenom"]) prenomEl.value = data.answers["prenom"];
+    // questions
+    QUESTIONS.forEach(q => {
+      const el = document.getElementById(`q${q.id}`);
+      if (!el) return;
+      const val = data.answers[`q${q.id}`];
+      if (val !== undefined && val !== "") {
+        el.value = val;
+        if (q.type === "scale") {
+          const lbl = document.getElementById(`val${q.id}`);
+          if (lbl) lbl.textContent = val;
         }
-      });
-      const prenom = document.getElementById("participant-prenom");
-      const nom    = document.getElementById("participant-nom");
-      if (prenom && data.answers["prenom"]) prenom.value = data.answers["prenom"];
-      if (nom    && data.answers["nom"])    nom.value    = data.answers["nom"];
-    }
+      }
+    });
     if (data.hints) {
       hintsUsed = data.hints;
       document.getElementById("hints-count").textContent = hintsUsed;
     }
+    // Reprendre à la dernière page visitée (max page 1 au reload)
+    if (data.page && data.page >= 1) {
+      goToPage(data.page, false, true); // silent = pas d'animation
+    }
   } catch(e) { /* ignore */ }
 }
 
-
-// Build pages
+/* ══════════════════════════════════════════════════════
+   ⑤ BUILD UI — PAGE 0 : ACCUEIL / IDENTITÉ
+══════════════════════════════════════════════════════ */
 const container = document.getElementById("pages-container");
+
+// Page 0
+const page0 = document.createElement("div");
+page0.className = "page-block active";
+page0.id = "page-0";
+page0.innerHTML = `
+  <div class="welcome-card">
+    <span class="ornament">✦ ✦ ✦</span>
+    <h2>Bienvenue dans l'Épreuve des Témoins</h2>
+    <p>27 énigmes à résoudre, des indices si besoin, et au bout du compte… la vérité sur les mariés.<br>Pour commencer, dites-nous qui vous êtes.</p>
+    <div class="welcome-input-wrap">
+      <label for="participant-prenom">Votre prénom &amp; nom</label>
+      <input type="text" id="participant-prenom" placeholder="Ex : Marie Dupont" autocomplete="name" oninput="saveToStorage()" />
+    </div>
+  </div>
+  <div class="btn-row">
+    <button type="button" class="btn btn-next" style="margin-left:auto" onclick="startQuestionnaire()">Commencer →</button>
+  </div>`;
+container.appendChild(page0);
+
+/* ══════════════════════════════════════════════════════
+   ⑥ BUILD UI — PAGES 1 à 5 : QUESTIONS
+══════════════════════════════════════════════════════ */
 for (let p = 1; p <= TOTAL_PAGES; p++) {
   const pageEl = document.createElement("div");
-  pageEl.className = "page-block" + (p === 1 ? " active" : "");
+  pageEl.className = "page-block";
   pageEl.id = `page-${p}`;
 
   const qs = QUESTIONS.filter(q => q.page === p);
   const firstId = qs[0].id, lastId = qs[qs.length-1].id;
-
   pageEl.innerHTML = `<div class="page-title">Partie ${p} — questions ${firstId} à ${lastId}</div>`;
 
+  // Question cards
   qs.forEach(q => {
     const card = document.createElement("div");
     card.className = "card";
@@ -322,15 +319,26 @@ for (let p = 1; p <= TOTAL_PAGES; p++) {
 
     const iw = document.createElement("div");
     if (q.type === "text") {
-      iw.innerHTML = `<input type="text" id="q${q.id}" placeholder="${q.placeholder||''}" oninput="updateProgress()" autocomplete="off" />`;
+      iw.innerHTML = `<input type="text" id="q${q.id}" placeholder="${q.placeholder||''}" oninput="onAnswer()" autocomplete="off" />`;
+    } else if (q.type === "textarea") {
+      iw.innerHTML = `<textarea id="q${q.id}" placeholder="${q.placeholder||''}" oninput="onAnswer()" rows="4"></textarea>`;
     } else if (q.type === "date") {
-      iw.innerHTML = `<input type="date" id="q${q.id}" onchange="updateProgress()" />`;
-    } else {
+      iw.innerHTML = `<input type="date" id="q${q.id}" onchange="onAnswer()" />`;
+    } else { // scale
       const mid = Math.round((q.min + q.max) / 2);
-      iw.innerHTML = `<div class="scale-wrap"><div class="scale-row"><input type="range" id="q${q.id}" min="${q.min}" max="${q.max}" value="${mid}" oninput="document.getElementById('val${q.id}').textContent=this.value;updateProgress()" /><span class="scale-val" id="val${q.id}">${mid}</span></div><div class="scale-labels"><span>${q.min}</span><span>${q.max}</span></div></div>`;
+      iw.innerHTML = `
+        <div class="scale-wrap">
+          <div class="scale-row">
+            <input type="range" id="q${q.id}" min="${q.min}" max="${q.max}" value="${mid}"
+              oninput="document.getElementById('val${q.id}').textContent=this.value; onAnswer()" />
+            <span class="scale-val" id="val${q.id}">${mid}</span>
+          </div>
+          <div class="scale-labels"><span>${q.min}</span><span>${q.max}</span></div>
+        </div>`;
     }
     card.appendChild(iw);
 
+    // Hints
     const hints = [q.hint1, q.hint2, q.hint3].filter(Boolean);
     if (hints.length) {
       const hs = document.createElement("div");
@@ -351,68 +359,107 @@ for (let p = 1; p <= TOTAL_PAGES; p++) {
     pageEl.appendChild(card);
   });
 
-  // Buttons
+  // Navigation buttons
   const row = document.createElement("div");
   row.className = "btn-row";
-  if (p > 1) {
-    const b = document.createElement("button");
-    b.type="button"; b.className="btn btn-prev"; b.textContent="← Précédent";
-    b.onclick=()=>goToPage(p-1, true);
-    row.appendChild(b);
-  }
+
+  const prevBtn = document.createElement("button");
+  prevBtn.type = "button"; prevBtn.className = "btn btn-prev";
+  prevBtn.textContent = "← Précédent";
+  prevBtn.onclick = () => goToPage(p - 1, true);
+  row.appendChild(prevBtn);
+
   if (p < TOTAL_PAGES) {
-    const b = document.createElement("button");
-    b.type="button"; b.className="btn btn-next"; b.textContent="Suivant →";
-    b.onclick=()=>goToPage(p+1, false);
-    row.appendChild(b);
+    const nextBtn = document.createElement("button");
+    nextBtn.type = "button"; nextBtn.className = "btn btn-next";
+    nextBtn.textContent = "Suivant →";
+    nextBtn.onclick = () => goToPage(p + 1, false);
+    row.appendChild(nextBtn);
   } else {
-    const b = document.createElement("button");
-    b.type="button"; b.className="btn btn-submit"; b.id="submit-btn"; b.textContent="Envoyer mes réponses";
-    b.onclick=submitForm;
-    row.appendChild(b);
+    const subBtn = document.createElement("button");
+    subBtn.type = "button"; subBtn.className = "btn btn-submit"; subBtn.id = "submit-btn";
+    subBtn.textContent = "Envoyer mes réponses";
+    subBtn.onclick = submitForm;
+    row.appendChild(subBtn);
   }
+
   pageEl.appendChild(row);
   container.appendChild(pageEl);
 }
 
-// Build nav
+/* ══════════════════════════════════════════════════════
+   ⑦ BUILD NAV BAR (pages 1-5 uniquement)
+══════════════════════════════════════════════════════ */
 const navEl = document.getElementById("page-nav");
 for (let p = 1; p <= TOTAL_PAGES; p++) {
-  if (p > 1) { const l=document.createElement("div"); l.className="nav-line"; navEl.appendChild(l); }
-  const s = document.createElement("div");
-  s.className = "nav-step" + (p===1?" active":"");
-  s.id = `nav-${p}`;
-  s.innerHTML = `<div class="nav-dot">${p}</div><span class="nav-label">Partie ${p}</span>`;
-  s.onclick = () => goToPage(p, p < currentPage);
-  navEl.appendChild(s);
+  if (p > 1) {
+    const line = document.createElement("div");
+    line.className = "nav-line";
+    navEl.appendChild(line);
+  }
+  const step = document.createElement("div");
+  step.className = "nav-step";
+  step.id = `nav-${p}`;
+  step.innerHTML = `<div class="nav-dot">${p}</div><span class="nav-label">Partie ${p}</span>`;
+  step.onclick = () => goToPage(p, p < currentPage);
+  navEl.appendChild(step);
+}
+
+/* ══════════════════════════════════════════════════════
+   ⑧ NAVIGATION
+══════════════════════════════════════════════════════ */
+function startQuestionnaire() {
+  const prenom = document.getElementById("participant-prenom").value.trim();
+  if (!prenom) {
+    document.getElementById("participant-prenom").focus();
+    document.getElementById("participant-prenom").style.borderColor = "var(--gold)";
+    return;
+  }
+  goToPage(1, false);
+}
+
+function goToPage(target, back, silent) {
+  if (target < 0 || target > TOTAL_PAGES) return;
+
+  // Cache la page courante
+  const oldEl = document.getElementById(`page-${currentPage}`);
+  if (oldEl) { oldEl.classList.remove("active", "going-back"); }
+
+  // Affiche la nouvelle page
+  const newEl = document.getElementById(`page-${target}`);
+  if (!newEl) return;
+  if (!silent) {
+    newEl.classList.toggle("going-back", !!back);
+  }
+  newEl.classList.add("active");
+  currentPage = target;
+
+  // Nav bar : visible seulement sur pages 1-5
+  const isQuestion = target >= 1;
+  navEl.style.display      = isQuestion ? "flex"   : "none";
+  document.querySelector(".progress-strip").style.display = isQuestion ? "block" : "none";
+  document.getElementById("hints-badge").style.display    = isQuestion ? "block" : "none";
+
+  updateNav();
+  updateProgress();
+  saveToStorage();
+  if (!silent) window.scrollTo({ top: 0, behavior: "smooth" });
 }
 
 function updateNav() {
-  for (let p=1; p<=TOTAL_PAGES; p++) {
+  for (let p = 1; p <= TOTAL_PAGES; p++) {
     const s = document.getElementById(`nav-${p}`);
-    s.className = "nav-step" + (p===currentPage?" active": p<currentPage?" done":"");
+    if (!s) continue;
+    s.className = "nav-step" + (p === currentPage ? " active" : p < currentPage ? " done" : "");
   }
 }
 
-function goToPage(target, back) {
-  if (target<1||target>TOTAL_PAGES) return;
-  document.getElementById(`page-${currentPage}`).classList.remove("active");
-  const newEl = document.getElementById(`page-${target}`);
-  newEl.classList.toggle("going-back", back);
-  newEl.classList.add("active");
-  currentPage = target;
-  updateNav();
+/* ══════════════════════════════════════════════════════
+   ⑨ PROGRESS + STORAGE
+══════════════════════════════════════════════════════ */
+function onAnswer() {
   updateProgress();
-  window.scrollTo({top:0, behavior:"smooth"});
-}
-
-function revealHint(btn, hid) {
-  if (btn.dataset.used === "false") {
-    btn.dataset.used = "true"; btn.classList.add("used");
-    hintsUsed++;
-    document.getElementById("hints-count").textContent = hintsUsed;
-  }
-  document.getElementById(hid).classList.toggle("visible");
+  saveToStorage();
 }
 
 function updateProgress() {
@@ -420,28 +467,65 @@ function updateProgress() {
   QUESTIONS.forEach(q => {
     const el = document.getElementById(`q${q.id}`);
     if (!el) return;
-    if (q.type==="scale" || (el.value && el.value.trim())) filled++;
+    if (q.type === "scale" || (el.value && el.value.trim())) filled++;
   });
-  document.getElementById("progress-fill").style.width = Math.round(filled/QUESTIONS.length*100)+"%";
+  document.getElementById("progress-fill").style.width = Math.round(filled / QUESTIONS.length * 100) + "%";
 }
-updateProgress();
 
+/* ══════════════════════════════════════════════════════
+   ⑩ HINTS
+══════════════════════════════════════════════════════ */
+function revealHint(btn, hid) {
+  if (btn.dataset.used === "false") {
+    btn.dataset.used = "true";
+    btn.classList.add("used");
+    hintsUsed++;
+    document.getElementById("hints-count").textContent = hintsUsed;
+    saveToStorage();
+  }
+  document.getElementById(hid).classList.toggle("visible");
+}
+
+/* ══════════════════════════════════════════════════════
+   ⑪ SUBMIT
+══════════════════════════════════════════════════════ */
 async function submitForm() {
   const btn = document.getElementById("submit-btn");
-  btn.disabled=true; btn.textContent="Envoi en cours…";
-  const payload = {hints_used: hintsUsed};
-  QUESTIONS.forEach(q => { payload[`q${q.id}`] = document.getElementById(`q${q.id}`)?.value||""; });
+  btn.disabled = true; btn.textContent = "Envoi en cours…";
+
+  const payload = { hints_used: hintsUsed };
+  payload["prenom"] = document.getElementById("participant-prenom")?.value || "";
+  QUESTIONS.forEach(q => { payload[`q${q.id}`] = document.getElementById(`q${q.id}`)?.value || ""; });
+
   try {
-    await fetch(APPS_SCRIPT_URL, {method:"POST", mode:"no-cors", headers:{"Content-Type":"application/json"}, body:JSON.stringify(payload)});
-    document.getElementById("questionnaire-page").style.display="none";
-    document.getElementById("result-page").style.display="block";
-    window.scrollTo({top:0, behavior:"smooth"});
+    await fetch(APPS_SCRIPT_URL, {
+      method: "POST", mode: "no-cors",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload)
+    });
+    localStorage.removeItem(STORAGE_KEY);
+    const prenom = payload["prenom"].split(" ")[0] || "";
+    document.getElementById("result-title").textContent = prenom ? `Merci ${prenom} !` : "Merci pour vos réponses !";
+    document.getElementById("questionnaire-page").style.display = "none";
+    document.getElementById("result-page").style.display = "block";
+    window.scrollTo({ top: 0, behavior: "smooth" });
   } catch(e) {
     alert("Erreur lors de l'envoi. Vérifie ta connexion et réessaie.");
-    btn.disabled=false; btn.textContent="Envoyer mes réponses";
+    btn.disabled = false; btn.textContent = "Envoyer mes réponses";
   }
 }
-    });
+
+/* ══════════════════════════════════════════════════════
+   ⑫ INIT
+══════════════════════════════════════════════════════ */
+// Cacher nav/progress au départ (page 0)
+navEl.style.display = "none";
+document.querySelector(".progress-strip").style.display = "none";
+
+// Restaurer depuis localStorage
+restoreFromStorage();
+updateProgress();
 </script>
 </body>
 </html>
+
