@@ -160,6 +160,12 @@
     <div class="icon">🎉</div>
     <h2 id="result-title">Merci pour vos réponses !</h2>
     <p>Tout a bien été enregistré.<br>On a hâte de les découvrir !</p>
+    <button type="button" onclick="modifyAnswers()"
+      style="margin-top:2rem;padding:.7rem 2rem;background:none;border:1px solid var(--border);border-radius:var(--radius);font-family:'Outfit',sans-serif;font-size:.82rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);cursor:pointer;transition:all .2s;"
+      onmouseover="this.style.borderColor='var(--accent)';this.style.color='var(--accent)'"
+      onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--muted)'">
+      ✎ Modifier mes réponses
+    </button>
   </div>
 
 </div>
@@ -169,7 +175,7 @@
    ① URL DE TON APPS SCRIPT
    👉 Remplace après déploiement
 ══════════════════════════════════════════════════════ */
-const APPS_SCRIPT_URL = "COLLE_ICI_TON_URL_APPS_SCRIPT";
+const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwdnuzpn_P55SQPD5OMpmyCDuViT9w2FQsmiAGLZ30W7-I4k4H1UhdN9KTnMmCFXqAQUQ/exec";
 
 /* ══════════════════════════════════════════════════════
    ② TES 27 QUESTIONS
@@ -503,7 +509,11 @@ async function submitForm() {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload)
     });
-    localStorage.removeItem(STORAGE_KEY);
+    // On garde le localStorage pour pouvoir modifier — on ajoute juste un flag "envoyé"
+    const stored = JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}");
+    stored.submitted = true;
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(stored));
+
     const prenom = payload["prenom"].split(" ")[0] || "";
     document.getElementById("result-title").textContent = prenom ? `Merci ${prenom} !` : "Merci pour vos réponses !";
     document.getElementById("questionnaire-page").style.display = "none";
@@ -513,6 +523,16 @@ async function submitForm() {
     alert("Erreur lors de l'envoi. Vérifie ta connexion et réessaie.");
     btn.disabled = false; btn.textContent = "Envoyer mes réponses";
   }
+}
+
+function modifyAnswers() {
+  // Repasse en mode questionnaire, reprend à la page 1, réactive le bouton envoyer
+  document.getElementById("result-page").style.display = "none";
+  document.getElementById("questionnaire-page").style.display = "block";
+  const btn = document.getElementById("submit-btn");
+  if (btn) { btn.disabled = false; btn.textContent = "Renvoyer mes réponses"; }
+  goToPage(1, false, true);
+  window.scrollTo({ top: 0, behavior: "smooth" });
 }
 
 /* ══════════════════════════════════════════════════════
@@ -528,4 +548,3 @@ updateProgress();
 </script>
 </body>
 </html>
-
