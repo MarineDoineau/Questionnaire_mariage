@@ -175,7 +175,7 @@
    ① URL DE TON APPS SCRIPT
    👉 Remplace après déploiement
 ══════════════════════════════════════════════════════ */
-const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwdnuzpn_P55SQPD5OMpmyCDuViT9w2FQsmiAGLZ30W7-I4k4H1UhdN9KTnMmCFXqAQUQ/exec";
+const APPS_SCRIPT_URL = "COLLE_ICI_TON_URL_APPS_SCRIPT";
 
 /* ══════════════════════════════════════════════════════
    ② TES 27 QUESTIONS
@@ -236,7 +236,7 @@ let hintsUsed = 0;
    ④ LOCALSTORAGE
 ══════════════════════════════════════════════════════ */
 function saveToStorage() {
-  const data = { page: currentPage, hints: hintsUsed, answers: {} };
+  const data = { page: currentPage, hints: hintsUsed, answers: {}, hintsUsed: {} };
   // identité
   const prenomEl = document.getElementById("participant-prenom");
   if (prenomEl) data.answers["prenom"] = prenomEl.value;
@@ -244,6 +244,11 @@ function saveToStorage() {
   QUESTIONS.forEach(q => {
     const el = document.getElementById(`q${q.id}`);
     if (el) data.answers[`q${q.id}`] = el.value;
+    // état des boutons d'indices
+    [0, 1, 2].forEach(i => {
+      const btn = document.getElementById(`btn-${q.id}-${i}`);
+      if (btn) data.hintsUsed[`btn-${q.id}-${i}`] = btn.dataset.used;
+    });
   });
   localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
 }
@@ -273,6 +278,21 @@ function restoreFromStorage() {
     if (data.hints) {
       hintsUsed = data.hints;
       document.getElementById("hints-count").textContent = hintsUsed;
+      // Rétablir l'état used + visibilité des boutons d'indices
+      QUESTIONS.forEach(q => {
+        [0, 1, 2].forEach(i => {
+          const btn = document.getElementById(`btn-${q.id}-${i}`);
+          if (!btn) return;
+          const wasUsed = data.hintsUsed && data.hintsUsed[`btn-${q.id}-${i}`] === "true";
+          if (wasUsed) {
+            btn.dataset.used = "true";
+            btn.classList.add("used");
+            // Déverrouille le suivant
+            const nextBtn = document.getElementById(`btn-${q.id}-${i + 1}`);
+            if (nextBtn) nextBtn.style.display = "inline-flex";
+          }
+        });
+      });
     }
     // Reprendre à la dernière page visitée (max page 1 au reload)
     if (data.page && data.page >= 1) {
@@ -354,8 +374,12 @@ for (let p = 1; p <= TOTAL_PAGES; p++) {
         const btn = document.createElement("button");
         btn.type = "button"; btn.className = "hint-btn";
         btn.dataset.hid = hid; btn.dataset.used = "false";
+        btn.dataset.index = i;
+        btn.id = `btn-${q.id}-${i}`;
         btn.textContent = `💡 Indice ${i+1}`;
-        btn.onclick = () => revealHint(btn, hid);
+        btn.onclick = () => revealHint(btn, hid, q.id, i);
+        // Indices 2 et 3 cachés par défaut
+        if (i > 0) btn.style.display = "none";
         const txt = document.createElement("div");
         txt.className = "hint-text"; txt.id = hid; txt.textContent = h;
         hs.appendChild(btn); hs.appendChild(txt);
@@ -481,12 +505,18 @@ function updateProgress() {
 /* ══════════════════════════════════════════════════════
    ⑩ HINTS
 ══════════════════════════════════════════════════════ */
-function revealHint(btn, hid) {
+function revealHint(btn, hid, qId, idx) {
   if (btn.dataset.used === "false") {
     btn.dataset.used = "true";
     btn.classList.add("used");
     hintsUsed++;
     document.getElementById("hints-count").textContent = hintsUsed;
+    // Déverrouille l'indice suivant s'il existe
+    const nextBtn = document.getElementById(`btn-${qId}-${idx + 1}`);
+    if (nextBtn) {
+      nextBtn.style.display = "inline-flex";
+      nextBtn.style.animation = "fadeUp .3s ease";
+    }
     saveToStorage();
   }
   document.getElementById(hid).classList.toggle("visible");
