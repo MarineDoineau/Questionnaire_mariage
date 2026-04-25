@@ -96,8 +96,8 @@
     .hint-section { margin-top:1rem; display:flex; flex-wrap:wrap; gap:.4rem; }
     .hint-btn { display:inline-flex; align-items:center; gap:.35rem; background:none; border:1px solid var(--border); padding:.3rem .85rem; border-radius:20px; font-family:'Outfit',sans-serif; font-size:.75rem; letter-spacing:.05em; color:var(--muted); cursor:pointer; transition:all .2s; }
     .hint-btn:hover, .hint-btn.used { border-color:var(--gold); color:var(--accent); }
-    .hint-text { width:100%; margin-top:.5rem; padding:.6rem .95rem; background:var(--accent-lt); border-left:2px solid var(--gold); border-radius:0 var(--radius) var(--radius) 0; font-size:.85rem; color:var(--accent); display:none; animation:fadeUp .25s ease; }
-    .hint-text.visible { display:block; }
+    .hint-text { width:100%; margin-top:.5rem; padding:.6rem .95rem; background:var(--accent-lt); border-left:2px solid var(--gold); border-radius:0 var(--radius) var(--radius) 0; font-size:.85rem; color:var(--accent); display:none; }
+    .hint-text.visible { display:block; animation:fadeUp .25s ease; }
 
     /* WELCOME CARD (page 0) */
     .welcome-card { background:var(--surface); border:1px solid var(--gold); border-radius:12px; padding:2.2rem 2rem; margin-bottom:1.5rem; box-shadow:var(--shadow); text-align:center; }
@@ -135,11 +135,6 @@
 <body>
 <div class="shell">
 
-  <!-- ══════════════════════════════════════════════
-       HEADER — LOGO
-       👉 Place ton fichier logo dans le même dossier
-          que index.html et remplace "logo.png" par son nom.
-  ══════════════════════════════════════════════ -->
   <header class="site-header">
     <div class="logo-wrap">
       <img src="logo.png" alt="Logo"
@@ -171,84 +166,68 @@
 </div>
 
 <script>
-/* ══════════════════════════════════════════════════════
-   ① URL DE TON APPS SCRIPT
-   👉 Remplace après déploiement
-══════════════════════════════════════════════════════ */
+/* ① URL */
 const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwdnuzpn_P55SQPD5OMpmyCDuViT9w2FQsmiAGLZ30W7-I4k4H1UhdN9KTnMmCFXqAQUQ/exec";
 
-/* ══════════════════════════════════════════════════════
-   ② TES 27 QUESTIONS
-   👉 Remplace "Énigme X" par tes vraies questions.
-      Types : "text" | "date" | "scale" | "textarea"
-      hint1 / hint2 / hint3 sont optionnels.
-══════════════════════════════════════════════════════ */
+/* ② QUESTIONS */
 const QUESTIONS = [
-  // PAGE 1 — Q1 à Q5
-  { id:1,  page:1, question:"Énigme 1",  type:"text",  placeholder:"Lieu", hint1:"Nous recherchons une adresse.", hint2:"Les chiffres représentent des coordonnées géographiques.", hint3:"Rentrez les coordonnées dans Google Maps." },
-  { id:2,  page:1, question:"Énigme 2",  type:"date",  hint1:"Les points permettent de distinguer le jour, le mois et l'année.",  hint2:"Creuser du côté des chiffres romains.", hint3:"Nous cherchons la date de naissance d'Amélia." },
-  { id:3,  page:1, question:"Énigme 3",  type:"text",  placeholder:"Deux prénoms", hint1:"Il s'agit d'un rébus.", hint2:"Noms de nos deux chiennes", hint3 :"La première ligne permet de faire 'Rebelle'" },
-  { id:4,  page:1, question:"Énigme 4",  type:"text",  placeholder:"Personnage de fiction", hint1:"Personnage principal d'un film qui parle de magie.", hint2:"Sorcier célèbre avec un cicatrice sur le front.", hint3:"Son prénom est Harry." },
-  { id:5,  page:1, question:"Énigme 5",  type:"text",  placeholder:"Expression", hint1:"Expression célèbre, en lien avec la taille", hint2:"Regardez le nombre de pommes.", hint3:"xxx comme xxx pommes" },
+  // PAGE 1
+  { id:1,  page:1, question:"Énigme 1", type:"text",  placeholder:"Lieu", hint1:"Nous recherchons une adresse.", hint2:"Les chiffres représentent des coordonnées géographiques.", hint3:"Rentrez les coordonnées dans Google Maps." },
+  { id:2,  page:1, question:"Énigme 2", type:"date",  hint1:"Les points permettent de distinguer le jour, le mois et l'année.", hint2:"Creuser du côté des chiffres romains.", hint3:"Nous cherchons la date de naissance d'Amélia." },
+  { id:3,  page:1, question:"Énigme 3", type:"text",  placeholder:"Deux prénoms", hint1:"Il s'agit d'un rébus.", hint2:"Noms de nos deux chiennes", hint3:"La première ligne permet de faire 'Rebelle'" },
+  { id:4,  page:1, question:"Énigme 4", type:"text",  placeholder:"Personnage de fiction", hint1:"Personnage principal d'un film qui parle de magie.", hint2:"Sorcier célèbre avec une cicatrice sur le front.", hint3:"Son prénom est Harry." },
+  { id:5,  page:1, question:"Énigme 5", type:"text",  placeholder:"Expression", hint1:"Expression célèbre, en lien avec la taille", hint2:"Regardez le nombre de pommes.", hint3:"xxx comme xxx pommes" },
 
+  // PAGE 2
+  { id:6,  page:2, question:"Énigme 6",  type:"text",  placeholder:"Couleur…",        hint1:"Couleur des cheveux de Clément" },
+  { id:7,  page:2, question:"Énigme 7",  type:"scale", min:1, max:20, hint1:"1 = pas important, 20 = très important" },
+  { id:8,  page:2, question:"Énigme 8",  type:"scale", min:1, max:5,  hint1:"1 = pas important, 5 = très important" },
+  { id:9,  page:2, question:"Énigme 9",  type:"scale", min:1, max:5,  hint1:"1 = pas important, 5 = très important" },
+  { id:10, page:2, question:"Énigme 10", type:"scale", min:1, max:5,  hint1:"1 = pas important, 5 = très important" },
+  { id:11, page:2, question:"Énigme 11", type:"text",  placeholder:"Votre réponse…" },
 
-  // PAGE 2 — Q6 à Q11
-  { id:6,  page:2, question:"Énigme 6",  type:"text",     placeholder:"Couleur…",       hint1:"Couleur des cheveux de Clément" },
-  { id:7,  page:2, question:"Énigme 7",  type:"scale",    min:1, max:20, hint1:"1 = pas important, 20 = très important" },
-  { id:8,  page:2, question:"Énigme 8",  type:"scale",    min:1, max:5,  hint1:"1 = pas important, 5 = très important" },
-  { id:9,  page:2, question:"Énigme 9",  type:"scale",    min:1, max:5,  hint1:"1 = pas important, 5 = très important" },
-  { id:10, page:2, question:"Énigme 10", type:"scale",    min:1, max:5,  hint1:"1 = pas important, 5 = très important" },
-  { id:11, page:2, question:"Énigme 11", type:"text",     placeholder:"Votre réponse…" },
-
-  // PAGE 3 — Q12 à Q16
-  { id:12, page:3, question:"Énigme 12", type:"text",     placeholder:"Votre réponse…" },
+  // PAGE 3
+  { id:12, page:3, question:"Énigme 12", type:"text",  placeholder:"Votre réponse…" },
   { id:13, page:3, question:"Énigme 13", type:"date" },
-  { id:14, page:3, question:"Énigme 14", type:"text",     placeholder:"Votre réponse…" },
-  { id:15, page:3, question:"Énigme 15", type:"scale",    min:1, max:10 },
-  { id:16, page:3, question:"Énigme 16", type:"text",     placeholder:"Votre réponse…" },
+  { id:14, page:3, question:"Énigme 14", type:"text",  placeholder:"Votre réponse…" },
+  { id:15, page:3, question:"Énigme 15", type:"scale", min:1, max:10 },
+  { id:16, page:3, question:"Énigme 16", type:"text",  placeholder:"Votre réponse…" },
 
-  // PAGE 4 — Q17 à Q22
-  { id:17, page:4, question:"Énigme 17", type:"scale",    min:1, max:5 },
-  { id:18, page:4, question:"Énigme 18", type:"text",     placeholder:"Votre réponse…" },
-  { id:19, page:4, question:"Énigme 19", type:"text",     placeholder:"Votre réponse…" },
-  { id:20, page:4, question:"Énigme 20", type:"scale",    min:1, max:10 },
-  { id:21, page:4, question:"Énigme 21", type:"text",     placeholder:"Votre réponse…" },
+  // PAGE 4
+  { id:17, page:4, question:"Énigme 17", type:"scale", min:1, max:5 },
+  { id:18, page:4, question:"Énigme 18", type:"text",  placeholder:"Votre réponse…" },
+  { id:19, page:4, question:"Énigme 19", type:"text",  placeholder:"Votre réponse…" },
+  { id:20, page:4, question:"Énigme 20", type:"scale", min:1, max:10 },
+  { id:21, page:4, question:"Énigme 21", type:"text",  placeholder:"Votre réponse…" },
   { id:22, page:4, question:"Énigme 22", type:"date" },
 
-  // PAGE 5 — Q23 à Q28
-  { id:23, page:5, question:"Énigme 23", type:"text",     placeholder:"Votre réponse…" },
-  { id:24, page:5, question:"Énigme 24", type:"scale",    min:1, max:5 },
-  { id:25, page:5, question:"Énigme 25", type:"text",     placeholder:"Votre réponse…" },
-  { id:26, page:5, question:"Énigme 26", type:"scale",    min:1, max:20 },
-  { id:27, page:5, question:"Énigme 27", type:"text",     placeholder:"Votre réponse…" },
+  // PAGE 5
+  { id:23, page:5, question:"Énigme 23", type:"text",  placeholder:"Votre réponse…" },
+  { id:24, page:5, question:"Énigme 24", type:"scale", min:1, max:5 },
+  { id:25, page:5, question:"Énigme 25", type:"text",  placeholder:"Votre réponse…" },
+  { id:26, page:5, question:"Énigme 26", type:"scale", min:1, max:20 },
+  { id:27, page:5, question:"Énigme 27", type:"text",  placeholder:"Votre réponse…" },
   { id:28, page:5, question:"En quelques mots, qu'avez-vous retenu de cette aventure ? Une surprise, une difficulté, un moment inattendu ?", type:"textarea", placeholder:"Vos impressions, en toute liberté…" },
 ];
 
-/* ══════════════════════════════════════════════════════
-   ③ STATE
-══════════════════════════════════════════════════════ */
-// Pages : 0 = accueil/identité, 1-5 = questions, 6 = résultat
+/* ③ STATE */
 const TOTAL_PAGES = 5;
-const STORAGE_KEY = "epreuve_temoins_v2";
+const STORAGE_KEY = "enigmes_maries_v1";
 let currentPage = 0;
 let hintsUsed = 0;
 
-/* ══════════════════════════════════════════════════════
-   ④ LOCALSTORAGE
-══════════════════════════════════════════════════════ */
+/* ④ LOCALSTORAGE */
 function saveToStorage() {
-  const data = { page: currentPage, hints: hintsUsed, answers: {}, hintsUsed: {} };
-  // identité
+  const data = { page: currentPage, hints: hintsUsed, answers: {}, hintStates: {} };
   const prenomEl = document.getElementById("participant-prenom");
   if (prenomEl) data.answers["prenom"] = prenomEl.value;
-  // questions
   QUESTIONS.forEach(q => {
     const el = document.getElementById(`q${q.id}`);
     if (el) data.answers[`q${q.id}`] = el.value;
-    // état des boutons d'indices
+    // Sauvegarder l'état used de chaque bouton d'indice
     [0, 1, 2].forEach(i => {
       const btn = document.getElementById(`btn-${q.id}-${i}`);
-      if (btn) data.hintsUsed[`btn-${q.id}-${i}`] = btn.dataset.used;
+      if (btn) data.hintStates[`${q.id}-${i}`] = btn.dataset.used;
     });
   });
   localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
@@ -260,10 +239,12 @@ function restoreFromStorage() {
     if (!raw) return;
     const data = JSON.parse(raw);
     if (!data.answers) return;
-    // identité
+
+    // Identité
     const prenomEl = document.getElementById("participant-prenom");
     if (prenomEl && data.answers["prenom"]) prenomEl.value = data.answers["prenom"];
-    // questions
+
+    // Réponses
     QUESTIONS.forEach(q => {
       const el = document.getElementById(`q${q.id}`);
       if (!el) return;
@@ -276,16 +257,14 @@ function restoreFromStorage() {
         }
       }
     });
-    if (data.hints) {
-      hintsUsed = data.hints;
-      document.getElementById("hints-count").textContent = hintsUsed;
-      // Rétablir l'état used + visibilité des boutons d'indices
+
+    // Indices — restaurer état et visibilité
+    if (data.hintStates) {
       QUESTIONS.forEach(q => {
         [0, 1, 2].forEach(i => {
           const btn = document.getElementById(`btn-${q.id}-${i}`);
           if (!btn) return;
-          const wasUsed = data.hintsUsed && data.hintsUsed[`btn-${q.id}-${i}`] === "true";
-          if (wasUsed) {
+          if (data.hintStates[`${q.id}-${i}`] === "true") {
             btn.dataset.used = "true";
             btn.classList.add("used");
             // Déverrouille le suivant
@@ -295,19 +274,22 @@ function restoreFromStorage() {
         });
       });
     }
-    // Reprendre à la dernière page visitée (max page 1 au reload)
+
+    // Compteur d'indices
+    if (data.hints) {
+      hintsUsed = data.hints;
+      document.getElementById("hints-count").textContent = hintsUsed;
+    }
+
+    // Reprendre à la dernière page
     if (data.page && data.page >= 1) {
-      goToPage(data.page, false, true); // silent = pas d'animation
+      goToPage(data.page, false, true);
     }
   } catch(e) { /* ignore */ }
 }
 
-/* ══════════════════════════════════════════════════════
-   ⑤ BUILD UI — PAGE 0 : ACCUEIL / IDENTITÉ
-══════════════════════════════════════════════════════ */
+/* ⑤ PAGE 0 — ACCUEIL */
 const container = document.getElementById("pages-container");
-
-// Page 0
 const page0 = document.createElement("div");
 page0.className = "page-block active";
 page0.id = "page-0";
@@ -326,24 +308,21 @@ page0.innerHTML = `
   </div>`;
 container.appendChild(page0);
 
-/* ══════════════════════════════════════════════════════
-   ⑥ BUILD UI — PAGES 1 à 5 : QUESTIONS
-══════════════════════════════════════════════════════ */
+/* ⑥ PAGES 1–5 — QUESTIONS */
 for (let p = 1; p <= TOTAL_PAGES; p++) {
   const pageEl = document.createElement("div");
   pageEl.className = "page-block";
   pageEl.id = `page-${p}`;
 
   const qs = QUESTIONS.filter(q => q.page === p);
-  const firstId = qs[0].id, lastId = qs[qs.length-1].id;
-  pageEl.innerHTML = `<div class="page-title">Partie ${p} — questions ${firstId} à ${lastId}</div>`;
+  pageEl.innerHTML = `<div class="page-title">Partie ${p} — questions ${qs[0].id} à ${qs[qs.length-1].id}</div>`;
 
-  // Question cards
   qs.forEach(q => {
     const card = document.createElement("div");
     card.className = "card";
     card.innerHTML = `<div class="card-header"><div class="q-num">${q.id}</div><div class="q-title">${q.question}</div></div>`;
 
+    // Input
     const iw = document.createElement("div");
     if (q.type === "text") {
       iw.innerHTML = `<input type="text" id="q${q.id}" placeholder="${q.placeholder||''}" oninput="onAnswer()" autocomplete="off" />`;
@@ -351,7 +330,7 @@ for (let p = 1; p <= TOTAL_PAGES; p++) {
       iw.innerHTML = `<textarea id="q${q.id}" placeholder="${q.placeholder||''}" oninput="onAnswer()" rows="4"></textarea>`;
     } else if (q.type === "date") {
       iw.innerHTML = `<input type="date" id="q${q.id}" onchange="onAnswer()" />`;
-    } else { // scale
+    } else {
       const mid = Math.round((q.min + q.max) / 2);
       iw.innerHTML = `
         <div class="scale-wrap">
@@ -365,32 +344,39 @@ for (let p = 1; p <= TOTAL_PAGES; p++) {
     }
     card.appendChild(iw);
 
-    // Hints
+    // ── INDICES : seul le bouton 0 est visible au départ ──
     const hints = [q.hint1, q.hint2, q.hint3].filter(Boolean);
     if (hints.length) {
       const hs = document.createElement("div");
       hs.className = "hint-section";
       hints.forEach((h, i) => {
         const hid = `hint-${q.id}-${i}`;
+
         const btn = document.createElement("button");
-        btn.type = "button"; btn.className = "hint-btn";
-        btn.dataset.hid = hid; btn.dataset.used = "false";
-        btn.dataset.index = i;
+        btn.type = "button";
+        btn.className = "hint-btn";
         btn.id = `btn-${q.id}-${i}`;
-        btn.textContent = `💡 Indice ${i+1}`;
+        btn.dataset.used = "false";
+        btn.textContent = `💡 Indice ${i + 1}`;
         btn.onclick = () => revealHint(btn, hid, q.id, i);
-        // Indices 2 et 3 cachés par défaut
+        // Indices 2 et 3 masqués par défaut
         if (i > 0) btn.style.display = "none";
+
         const txt = document.createElement("div");
-        txt.className = "hint-text"; txt.id = hid; txt.textContent = h;
-        hs.appendChild(btn); hs.appendChild(txt);
+        txt.className = "hint-text";
+        txt.id = hid;
+        txt.textContent = h;
+
+        hs.appendChild(btn);
+        hs.appendChild(txt);
       });
       card.appendChild(hs);
     }
+
     pageEl.appendChild(card);
   });
 
-  // Navigation buttons
+  // Boutons nav
   const row = document.createElement("div");
   row.className = "btn-row";
 
@@ -418,16 +404,10 @@ for (let p = 1; p <= TOTAL_PAGES; p++) {
   container.appendChild(pageEl);
 }
 
-/* ══════════════════════════════════════════════════════
-   ⑦ BUILD NAV BAR (pages 1-5 uniquement)
-══════════════════════════════════════════════════════ */
+/* ⑦ NAV BAR */
 const navEl = document.getElementById("page-nav");
 for (let p = 1; p <= TOTAL_PAGES; p++) {
-  if (p > 1) {
-    const line = document.createElement("div");
-    line.className = "nav-line";
-    navEl.appendChild(line);
-  }
+  if (p > 1) { const l = document.createElement("div"); l.className = "nav-line"; navEl.appendChild(l); }
   const step = document.createElement("div");
   step.className = "nav-step";
   step.id = `nav-${p}`;
@@ -436,14 +416,12 @@ for (let p = 1; p <= TOTAL_PAGES; p++) {
   navEl.appendChild(step);
 }
 
-/* ══════════════════════════════════════════════════════
-   ⑧ NAVIGATION
-══════════════════════════════════════════════════════ */
+/* ⑧ NAVIGATION */
 function startQuestionnaire() {
   const prenom = document.getElementById("participant-prenom").value.trim();
   if (!prenom) {
-    document.getElementById("participant-prenom").focus();
-    document.getElementById("participant-prenom").style.borderColor = "var(--gold)";
+    const el = document.getElementById("participant-prenom");
+    el.focus(); el.style.borderColor = "var(--gold)";
     return;
   }
   goToPage(1, false);
@@ -451,26 +429,17 @@ function startQuestionnaire() {
 
 function goToPage(target, back, silent) {
   if (target < 0 || target > TOTAL_PAGES) return;
-
-  // Cache la page courante
   const oldEl = document.getElementById(`page-${currentPage}`);
-  if (oldEl) { oldEl.classList.remove("active", "going-back"); }
-
-  // Affiche la nouvelle page
+  if (oldEl) oldEl.classList.remove("active", "going-back");
   const newEl = document.getElementById(`page-${target}`);
   if (!newEl) return;
-  if (!silent) {
-    newEl.classList.toggle("going-back", !!back);
-  }
+  if (!silent) newEl.classList.toggle("going-back", !!back);
   newEl.classList.add("active");
   currentPage = target;
-
-  // Nav bar : visible seulement sur pages 1-5
-  const isQuestion = target >= 1;
-  navEl.style.display      = isQuestion ? "flex"   : "none";
-  document.querySelector(".progress-strip").style.display = isQuestion ? "block" : "none";
-  document.getElementById("hints-badge").style.display    = isQuestion ? "block" : "none";
-
+  const isQ = target >= 1;
+  navEl.style.display = isQ ? "flex" : "none";
+  document.querySelector(".progress-strip").style.display = isQ ? "block" : "none";
+  document.getElementById("hints-badge").style.display    = isQ ? "block" : "none";
   updateNav();
   updateProgress();
   saveToStorage();
@@ -480,18 +449,12 @@ function goToPage(target, back, silent) {
 function updateNav() {
   for (let p = 1; p <= TOTAL_PAGES; p++) {
     const s = document.getElementById(`nav-${p}`);
-    if (!s) continue;
-    s.className = "nav-step" + (p === currentPage ? " active" : p < currentPage ? " done" : "");
+    if (s) s.className = "nav-step" + (p === currentPage ? " active" : p < currentPage ? " done" : "");
   }
 }
 
-/* ══════════════════════════════════════════════════════
-   ⑨ PROGRESS + STORAGE
-══════════════════════════════════════════════════════ */
-function onAnswer() {
-  updateProgress();
-  saveToStorage();
-}
+/* ⑨ PROGRESS */
+function onAnswer() { updateProgress(); saveToStorage(); }
 
 function updateProgress() {
   let filled = 0;
@@ -503,15 +466,15 @@ function updateProgress() {
   document.getElementById("progress-fill").style.width = Math.round(filled / QUESTIONS.length * 100) + "%";
 }
 
-/* ══════════════════════════════════════════════════════
-   ⑩ HINTS
-══════════════════════════════════════════════════════ */
+/* ⑩ HINTS — déverrouillage progressif */
 function revealHint(btn, hid, qId, idx) {
+  // Si premier clic sur ce bouton : marquer comme utilisé + déverrouiller le suivant
   if (btn.dataset.used === "false") {
     btn.dataset.used = "true";
     btn.classList.add("used");
     hintsUsed++;
     document.getElementById("hints-count").textContent = hintsUsed;
+
     // Déverrouille l'indice suivant s'il existe
     const nextBtn = document.getElementById(`btn-${qId}-${idx + 1}`);
     if (nextBtn) {
@@ -520,12 +483,11 @@ function revealHint(btn, hid, qId, idx) {
     }
     saveToStorage();
   }
+  // Afficher/masquer le texte de l'indice
   document.getElementById(hid).classList.toggle("visible");
 }
 
-/* ══════════════════════════════════════════════════════
-   ⑪ SUBMIT
-══════════════════════════════════════════════════════ */
+/* ⑪ SUBMIT */
 async function submitForm() {
   const btn = document.getElementById("submit-btn");
   btn.disabled = true; btn.textContent = "Envoi en cours…";
@@ -540,7 +502,6 @@ async function submitForm() {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload)
     });
-    // On garde le localStorage pour pouvoir modifier — on ajoute juste un flag "envoyé"
     const stored = JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}");
     stored.submitted = true;
     localStorage.setItem(STORAGE_KEY, JSON.stringify(stored));
@@ -557,7 +518,6 @@ async function submitForm() {
 }
 
 function modifyAnswers() {
-  // Repasse en mode questionnaire, reprend à la page 1, réactive le bouton envoyer
   document.getElementById("result-page").style.display = "none";
   document.getElementById("questionnaire-page").style.display = "block";
   const btn = document.getElementById("submit-btn");
@@ -566,14 +526,9 @@ function modifyAnswers() {
   window.scrollTo({ top: 0, behavior: "smooth" });
 }
 
-/* ══════════════════════════════════════════════════════
-   ⑫ INIT
-══════════════════════════════════════════════════════ */
-// Cacher nav/progress au départ (page 0)
+/* ⑫ INIT */
 navEl.style.display = "none";
 document.querySelector(".progress-strip").style.display = "none";
-
-// Restaurer depuis localStorage
 restoreFromStorage();
 updateProgress();
 </script>
